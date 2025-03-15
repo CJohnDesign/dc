@@ -39,3 +39,30 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+
+# Cache directories
+.turbo
+.cache
+.eslintcache
+.stylelintcache
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
