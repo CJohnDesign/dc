@@ -1,24 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
+import { usePageTransition } from '../hooks/usePageTransition';
 
 interface OurStorySectionProps {
   className?: string;
 }
 
 const OurStorySection = ({ className = '' }: OurStorySectionProps) => {
-  const [isVisible, setIsVisible] = useState(false);
-  
-  // Set visible on mount for immediate animation
-  useEffect(() => {
-    // Small delay to ensure animation is visible
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, []);
+  const { isVisible, isExiting, elementRef } = usePageTransition();
 
   const stats = [
     { value: '500+', label: 'Banking Partners', icon: '🏦' },
@@ -28,6 +19,7 @@ const OurStorySection = ({ className = '' }: OurStorySectionProps) => {
 
   return (
     <section 
+      ref={elementRef}
       className={`py-12 sm:py-16 md:py-20 bg-white ${className}`}
     >
       <div className="container mx-auto px-4 sm:px-8 md:px-16">
@@ -35,9 +27,15 @@ const OurStorySection = ({ className = '' }: OurStorySectionProps) => {
           {/* Left column - Text content */}
           <div className="transition-all duration-1000 delay-300"
                style={{
-                 transform: isVisible ? 'translateX(0)' : 'translateX(-100px)',
-                 opacity: isVisible ? 1 : 0,
-                 transition: 'transform 0.7s ease-out, opacity 0.7s ease-out'
+                 transform: isVisible && !isExiting 
+                   ? 'translateX(0)' 
+                   : isExiting 
+                     ? 'translateX(100px)' 
+                     : 'translateX(-100px)',
+                 opacity: isVisible && !isExiting ? 1 : 0,
+                 transition: isExiting
+                   ? 'transform 0.6s ease-in, opacity 0.6s ease-in'
+                   : 'transform 0.7s ease-out, opacity 0.7s ease-out'
                }}>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-[var(--secondary)]">
               Insider Knowledge, <br className="hidden sm:block" />Exceptional Results
@@ -92,9 +90,15 @@ const OurStorySection = ({ className = '' }: OurStorySectionProps) => {
                 <div 
                   className="bg-white p-4 md:p-6 rounded-lg text-center shadow-sm"
                   style={{ 
-                    transform: isVisible ? 'translateX(0)' : 'translateX(100px)',
-                    opacity: isVisible ? 1 : 0,
-                    transition: 'transform 0.7s ease-out, opacity 0.7s ease-out'
+                    transform: isVisible && !isExiting 
+                      ? 'translateX(0)' 
+                      : isExiting 
+                        ? 'translateX(-100px)' 
+                        : 'translateX(100px)',
+                    opacity: isVisible && !isExiting ? 1 : 0,
+                    transition: isExiting
+                      ? 'transform 0.6s ease-in, opacity 0.6s ease-in'
+                      : 'transform 0.7s ease-out, opacity 0.7s ease-out'
                   }}
                 >
                   <div className="text-3xl md:text-4xl mb-2 md:mb-3">{stats[0].icon}</div>
@@ -109,9 +113,15 @@ const OurStorySection = ({ className = '' }: OurStorySectionProps) => {
                       key={index} 
                       className="bg-white p-4 md:p-6 rounded-lg text-center shadow-sm"
                       style={{ 
-                        transform: isVisible ? 'translateX(0)' : 'translateX(100px)',
-                        opacity: isVisible ? 1 : 0,
-                        transition: `transform 0.7s ease-out ${(index + 1) * 200}ms, opacity 0.7s ease-out ${(index + 1) * 200}ms`
+                        transform: isVisible && !isExiting 
+                          ? 'translateX(0)' 
+                          : isExiting 
+                            ? 'translateX(-100px)' 
+                            : 'translateX(100px)',
+                        opacity: isVisible && !isExiting ? 1 : 0,
+                        transition: isExiting
+                          ? `transform 0.6s ease-in ${index * 100}ms, opacity 0.6s ease-in ${index * 100}ms`
+                          : `transform 0.7s ease-out ${(index + 1) * 200}ms, opacity 0.7s ease-out ${(index + 1) * 200}ms`
                       }}
                     >
                       <div className="text-3xl md:text-4xl mb-2 md:mb-3">{stat.icon}</div>

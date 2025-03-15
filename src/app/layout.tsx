@@ -62,7 +62,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${rethinkSans.variable} ${merriweather.variable}`}>
-      <body className="antialiased">
+      <body className="antialiased overflow-x-hidden">
         <a href="#content" className="sr-only focus:not-sr-only">Skip to content</a>
         <div id="content">
           {children}

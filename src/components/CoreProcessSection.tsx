@@ -48,6 +48,11 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
       title: 'Underwriting Intelligence',
       subtitle: 'Bank-Level Insight for Superior Outcomes',
       description: 'Using bank-level underwriting intelligence, we identify exactly what triggers approvals or rejections, ensuring your application meets precise lending standards.',
+      benefits: [
+        'Precise identification of approval triggers in your financial profile',
+        'Insider knowledge of bank-specific lending criteria',
+        'Early detection of potential rejection factors'
+      ],
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 md:h-12 md:w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -60,6 +65,11 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
       title: 'Strategic Restructuring',
       subtitle: 'Aligning Your Financial Profile',
       description: 'Our experts strategically restructure your financials to perfectly align with current banking algorithms and credit bureau preferences.',
+      benefits: [
+        'Strategic debt-to-income ratio optimization',
+        'Credit utilization restructuring for maximum impact',
+        'Financial statement alignment with lender expectations'
+      ],
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 md:h-12 md:w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
@@ -72,6 +82,11 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
       title: 'Presentation Optimization',
       subtitle: 'Crafting a Compelling Financial Story',
       description: 'We expertly package your financial data, addressing potential weaknesses proactively and enhancing your strengths to resonate clearly with lenders.',
+      benefits: [
+        'Professional documentation that highlights your strengths',
+        'Strategic presentation of growth potential and stability',
+        'Comprehensive financial narrative that resonates with lenders'
+      ],
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 md:h-12 md:w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -84,9 +99,9 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
   return (
     <section 
       ref={sectionRef}
-      className={`py-12 sm:py-16 md:py-20 bg-[var(--background-alt)] ${className}`}
+      className={`py-12 sm:py-16 md:py-20 bg-[var(--background-alt)] ${className} overflow-hidden`}
     >
-      <div className="container mx-auto px-4 sm:px-8 md:px-16">
+      <div className="container mx-auto px-4 sm:px-8 md:px-16 max-w-full">
         {/* Section header */}
         <div className={`text-center mb-8 sm:mb-12 md:mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4 text-[var(--secondary)]">
@@ -99,7 +114,7 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
         </div>
         
         {/* Tabs navigation - scrollable on mobile */}
-        <div className={`flex justify-start md:justify-center mb-8 md:mb-12 overflow-x-auto pb-2 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`flex justify-start md:justify-center mb-4 md:mb-6 overflow-x-auto pb-2 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="inline-flex bg-white rounded-full p-1 shadow-md">
             {pillars.map((pillar, index) => (
               <button
@@ -119,7 +134,7 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
         </div>
         
         {/* Content area */}
-        <div className="relative min-h-[500px] sm:min-h-[550px] md:min-h-[600px]">
+        <div className="relative min-h-[500px] sm:min-h-[550px] md:min-h-[600px] overflow-hidden">
           {pillars.map((pillar, index) => (
             <div
               key={pillar.id}
@@ -149,13 +164,13 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
                 
                 {/* Feature list */}
                 <ul className="space-y-2 sm:space-y-3">
-                  {[1, 2, 3].map((item) => (
-                    <li key={item} className="flex items-start">
+                  {pillar.benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-start">
                       <svg className="h-5 w-5 text-[var(--secondary)] mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className="text-sm sm:text-base text-[var(--foreground)]">
-                        Key benefit {item} of {pillar.title.toLowerCase()}
+                        {benefit}
                       </span>
                     </li>
                   ))}

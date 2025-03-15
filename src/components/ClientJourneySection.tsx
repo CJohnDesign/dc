@@ -114,16 +114,18 @@ const ClientJourneySection = ({ className = '' }: ClientJourneySectionProps) => 
             </svg>
             <div>
               <p className="text-base sm:text-lg italic mb-4 text-[var(--foreground)] text-center sm:text-left">
-                "The structured approach from Deliver Capital made all the difference. After being rejected by three banks, 
-                their optimization process helped us secure $250K in just 28 days. The step-by-step guidance was invaluable."
+                "The structured approach from Deliver Capital made all the difference. Even at the beginning of my business, 
+                Anthony helped me fix key issues, got me the startup capital I needed, and gave valuable recommendations on 
+                how to deploy it. After being rejected by three banks, their optimization process helped us secure $250K in 
+                just 28 days. The step-by-step guidance was invaluable for PostScarcity's growth."
               </p>
               <div className="flex flex-col sm:flex-row items-center">
                 <div className="h-10 w-10 bg-[var(--primary)] rounded-full flex items-center justify-center text-white font-bold mb-2 sm:mb-0 sm:mr-3">
-                  JD
+                  CJ
                 </div>
                 <div className="text-center sm:text-left">
-                  <p className="font-semibold text-[var(--secondary)]">John Doe</p>
-                  <p className="text-sm text-[var(--foreground)]">CEO, Acme Solutions</p>
+                  <p className="font-semibold text-[var(--secondary)]">Chris Johnston</p>
+                  <p className="text-sm text-[var(--foreground)]">Founder, PostScarcity AI</p>
                 </div>
               </div>
             </div>
