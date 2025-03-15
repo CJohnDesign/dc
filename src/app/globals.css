@@ -1,8 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --primary: #223f47;
+  --primary-dark: #1a2f35;
+  --primary-light: #2a4c55;
+  --secondary: #4a8d9b;
+  --accent: #6db0bd;
+  --text-light: #f5f5f5;
+  --text-dark: #333333;
+  --background: #E8E7E7;
+  --background-alt: #f8f8f8;
+  --background-warm: #f4f0ef;
   --foreground: #171717;
+  --success: #4caf50;
+  --warning: #ff9800;
+  --error: #f44336;
+  --navbar-bg: var(--background);
+  --navbar-text: var(--foreground);
+  --body-font: var(--font-geist-sans, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  --heading-font: var(--font-rethink-sans, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+  --numeric-font: var(--font-merriweather, Georgia, serif);
 }
 
 @theme inline {
@@ -14,13 +31,124 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Override dark mode to keep using light theme */
+    --background: #E8E7E7;
+    --background-alt: #f8f8f8;
+    --foreground: #171717;
   }
+}
+
+* {
+  font-family: var(--body-font);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--body-font);
+}
+
+/* Ensure all headings use Rethink Sans font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--heading-font);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--primary);
+}
+
+h1 {
+  font-size: 2.75rem;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 2rem;
+  color: var(--primary);
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+/* Numeric values styling */
+.numeric {
+  font-family: var(--numeric-font);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.stat-value {
+  font-family: var(--numeric-font);
+  font-weight: 900;
+  font-size: 2.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.navbar {
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+  height: 40px;
+  width: auto;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--text-light);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: var(--text-light);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--accent);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 2rem 0;
+  }
 }
