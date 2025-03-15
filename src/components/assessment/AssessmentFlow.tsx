@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import BusinessInfoStep from './steps/BusinessInfoStep';
 import FinancialInfoStep from './steps/FinancialInfoStep';
 import CreditInfoStep from './steps/CreditInfoStep';
 import FundingNeedsStep from './steps/FundingNeedsStep';
 import ReviewStep from './steps/ReviewStep';
 import ProgressBar from './ProgressBar';
+import AssessmentHeader from './AssessmentHeader';
+// Import the dummy data
+import assessmentData from '@/data/assessment.json';
 
 // Define the steps in our assessment flow
 const STEPS = [
@@ -16,6 +19,9 @@ const STEPS = [
   { id: 'funding-needs', title: 'Funding Needs' },
   { id: 'review', title: 'Review & Submit' },
 ];
+
+// Demo mode flag - set to true to enable demo mode
+const DEMO_MODE = true;
 
 // Define the form data structure
 export interface AssessmentFormData {
@@ -92,11 +98,60 @@ const initialFormData: AssessmentFormData = {
   bestTimeToContact: '',
 };
 
+// Helper function to load demo data
+const loadDemoData = (): AssessmentFormData => {
+  const demoData = assessmentData.dummyData;
+  
+  return {
+    // Business Information
+    businessName: demoData[0]?.data?.businessName || '',
+    businessType: demoData[0]?.data?.businessType || '',
+    industry: demoData[0]?.data?.industry || '',
+    yearsInBusiness: demoData[0]?.data?.yearsInBusiness || '',
+    numberOfEmployees: demoData[0]?.data?.numberOfEmployees || '',
+    businessAddress: demoData[0]?.data?.businessAddress || '',
+    businessCity: demoData[0]?.data?.businessCity || '',
+    businessState: demoData[0]?.data?.businessState || '',
+    businessZip: demoData[0]?.data?.businessZip || '',
+    
+    // Financial Information
+    annualRevenue: demoData[1]?.data?.annualRevenue || '',
+    monthlyRevenue: demoData[1]?.data?.monthlyRevenue || '',
+    currentDebt: demoData[1]?.data?.currentDebt || '',
+    profitMargin: demoData[1]?.data?.profitMargin || '',
+    
+    // Credit Information
+    creditScore: demoData[2]?.data?.creditScore || '',
+    bankruptcies: demoData[2]?.data?.bankruptcies || '',
+    taxLiens: demoData[2]?.data?.taxLiens || '',
+    judgments: demoData[2]?.data?.judgments || '',
+    
+    // Funding Needs
+    fundingAmount: demoData[3]?.data?.fundingAmount || '',
+    fundingPurpose: demoData[3]?.data?.fundingPurpose || '',
+    timeframe: demoData[3]?.data?.timeframe || '',
+    preferredTerms: demoData[3]?.data?.preferredTerms || '',
+    
+    // Contact Information
+    ownerName: demoData[4]?.data?.ownerName || '',
+    ownerEmail: demoData[4]?.data?.ownerEmail || '',
+    ownerPhone: demoData[4]?.data?.ownerPhone || '',
+    bestTimeToContact: demoData[4]?.data?.bestTimeToContact || '',
+  };
+};
+
 const AssessmentFlow: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [formData, setFormData] = useState<AssessmentFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+
+  // Load demo data if DEMO_MODE is enabled
+  useEffect(() => {
+    if (DEMO_MODE) {
+      setFormData(loadDemoData());
+    }
+  }, []);
 
   const currentStep = STEPS[currentStepIndex];
   const progress = ((currentStepIndex) / (STEPS.length - 1)) * 100;
@@ -104,6 +159,41 @@ const AssessmentFlow: React.FC = () => {
   const handleNext = () => {
     if (currentStepIndex < STEPS.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
+      
+      // If demo mode is enabled, load the demo data for the next step
+      if (DEMO_MODE) {
+        const demoData = assessmentData.dummyData;
+        const nextStepId = STEPS[currentStepIndex + 1].id;
+        
+        // Keep current form data
+        const updatedFormData = { ...formData };
+        
+        // Update form data based on the next step
+        if (nextStepId === 'financial-info' && demoData[1]?.data) {
+          updatedFormData.annualRevenue = demoData[1]?.data?.annualRevenue || '';
+          updatedFormData.monthlyRevenue = demoData[1]?.data?.monthlyRevenue || '';
+          updatedFormData.currentDebt = demoData[1]?.data?.currentDebt || '';
+          updatedFormData.profitMargin = demoData[1]?.data?.profitMargin || '';
+        } else if (nextStepId === 'credit-info' && demoData[2]?.data) {
+          updatedFormData.creditScore = demoData[2]?.data?.creditScore || '';
+          updatedFormData.bankruptcies = demoData[2]?.data?.bankruptcies || '';
+          updatedFormData.taxLiens = demoData[2]?.data?.taxLiens || '';
+          updatedFormData.judgments = demoData[2]?.data?.judgments || '';
+        } else if (nextStepId === 'funding-needs' && demoData[3]?.data) {
+          updatedFormData.fundingAmount = demoData[3]?.data?.fundingAmount || '';
+          updatedFormData.fundingPurpose = demoData[3]?.data?.fundingPurpose || '';
+          updatedFormData.timeframe = demoData[3]?.data?.timeframe || '';
+          updatedFormData.preferredTerms = demoData[3]?.data?.preferredTerms || '';
+        } else if (nextStepId === 'review' && demoData[4]?.data) {
+          updatedFormData.ownerName = demoData[4]?.data?.ownerName || '';
+          updatedFormData.ownerEmail = demoData[4]?.data?.ownerEmail || '';
+          updatedFormData.ownerPhone = demoData[4]?.data?.ownerPhone || '';
+          updatedFormData.bestTimeToContact = demoData[4]?.data?.bestTimeToContact || '';
+        }
+        
+        setFormData(updatedFormData);
+      }
+      
       window.scrollTo(0, 0);
     }
   };
@@ -111,6 +201,10 @@ const AssessmentFlow: React.FC = () => {
   const handlePrevious = () => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
+      
+      // No need to update form data when going back in demo mode
+      // The data should already be populated from the previous steps
+      
       window.scrollTo(0, 0);
     }
   };
@@ -200,11 +294,10 @@ const AssessmentFlow: React.FC = () => {
       ref={formRef}
       className="bg-white rounded-xl shadow-lg overflow-hidden"
     >
-      <div className="py-2 px-4 bg-[var(--primary)]">
-        <h4 className="text-xs !text-white numeric mt-3 mb-1">
-          Deliver Capital Funding Assessment
-        </h4>
-      </div>
+      <AssessmentHeader 
+        title="Deliver Capital Funding Assessment" 
+        showDemoMode={DEMO_MODE} 
+      />
       
       <ProgressBar progress={progress} steps={STEPS} currentStepIndex={currentStepIndex} />
       

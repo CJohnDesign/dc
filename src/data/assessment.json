@@ -1,0 +1,160 @@
+{
+  "dummyData": [
+    {
+      "id": "business-info",
+      "title": "Business Information",
+      "data": {
+        "businessName": "Acme Enterprises",
+        "businessType": "LLC",
+        "industry": "Technology",
+        "yearsInBusiness": "5",
+        "numberOfEmployees": "25",
+        "businessAddress": "123 Main Street",
+        "businessCity": "San Francisco",
+        "businessState": "CA",
+        "businessZip": "94105"
+      }
+    },
+    {
+      "id": "financial-info",
+      "title": "Financial Details",
+      "data": {
+        "annualRevenue": "1500000",
+        "monthlyRevenue": "125000",
+        "currentDebt": "350000",
+        "profitMargin": "18"
+      }
+    },
+    {
+      "id": "credit-info",
+      "title": "Credit Information",
+      "data": {
+        "creditScore": "720",
+        "bankruptcies": "0",
+        "taxLiens": "0",
+        "judgments": "0"
+      }
+    },
+    {
+      "id": "funding-needs",
+      "title": "Funding Needs",
+      "data": {
+        "fundingAmount": "250000",
+        "fundingPurpose": "Expansion",
+        "timeframe": "3-6 months",
+        "preferredTerms": "36 months"
+      }
+    },
+    {
+      "id": "contact-info",
+      "title": "Contact Information",
+      "data": {
+        "ownerName": "Jane Smith",
+        "ownerEmail": "jane.smith@acmeenterprises.com",
+        "ownerPhone": "(415) 555-1234",
+        "bestTimeToContact": "Morning"
+      }
+    }
+  ],
+  "sampleCompletedAssessments": [
+    {
+      "id": "assessment-1",
+      "businessName": "Acme Enterprises",
+      "businessType": "LLC",
+      "industry": "Technology",
+      "yearsInBusiness": "5",
+      "numberOfEmployees": "25",
+      "businessAddress": "123 Main Street",
+      "businessCity": "San Francisco",
+      "businessState": "CA",
+      "businessZip": "94105",
+      "annualRevenue": "1500000",
+      "monthlyRevenue": "125000",
+      "currentDebt": "350000",
+      "profitMargin": "18",
+      "creditScore": "720",
+      "bankruptcies": "0",
+      "taxLiens": "0",
+      "judgments": "0",
+      "fundingAmount": "250000",
+      "fundingPurpose": "Expansion",
+      "timeframe": "3-6 months",
+      "preferredTerms": "36 months",
+      "ownerName": "Jane Smith",
+      "ownerEmail": "jane.smith@acmeenterprises.com",
+      "ownerPhone": "(415) 555-1234",
+      "bestTimeToContact": "Morning",
+      "submittedAt": "2023-09-15T14:30:00Z",
+      "status": "Approved",
+      "approvedAmount": "225000",
+      "interestRate": "6.5",
+      "term": "36 months"
+    },
+    {
+      "id": "assessment-2",
+      "businessName": "Green Thumb Landscaping",
+      "businessType": "S-Corp",
+      "industry": "Landscaping",
+      "yearsInBusiness": "8",
+      "numberOfEmployees": "12",
+      "businessAddress": "456 Oak Avenue",
+      "businessCity": "Portland",
+      "businessState": "OR",
+      "businessZip": "97205",
+      "annualRevenue": "850000",
+      "monthlyRevenue": "70833",
+      "currentDebt": "120000",
+      "profitMargin": "22",
+      "creditScore": "680",
+      "bankruptcies": "0",
+      "taxLiens": "0",
+      "judgments": "1",
+      "fundingAmount": "150000",
+      "fundingPurpose": "Equipment Purchase",
+      "timeframe": "1-3 months",
+      "preferredTerms": "24 months",
+      "ownerName": "Robert Johnson",
+      "ownerEmail": "robert@greenthumblandscaping.com",
+      "ownerPhone": "(503) 555-6789",
+      "bestTimeToContact": "Afternoon",
+      "submittedAt": "2023-08-22T10:15:00Z",
+      "status": "Under Review",
+      "approvedAmount": null,
+      "interestRate": null,
+      "term": null
+    },
+    {
+      "id": "assessment-3",
+      "businessName": "Sunrise Bakery",
+      "businessType": "Sole Proprietorship",
+      "industry": "Food & Beverage",
+      "yearsInBusiness": "2",
+      "numberOfEmployees": "5",
+      "businessAddress": "789 Cherry Lane",
+      "businessCity": "Austin",
+      "businessState": "TX",
+      "businessZip": "78701",
+      "annualRevenue": "320000",
+      "monthlyRevenue": "26667",
+      "currentDebt": "75000",
+      "profitMargin": "15",
+      "creditScore": "650",
+      "bankruptcies": "0",
+      "taxLiens": "0",
+      "judgments": "0",
+      "fundingAmount": "50000",
+      "fundingPurpose": "Working Capital",
+      "timeframe": "Immediate",
+      "preferredTerms": "12 months",
+      "ownerName": "Maria Garcia",
+      "ownerEmail": "maria@sunrisebakery.com",
+      "ownerPhone": "(512) 555-4321",
+      "bestTimeToContact": "Evening",
+      "submittedAt": "2023-09-05T16:45:00Z",
+      "status": "Approved",
+      "approvedAmount": "45000",
+      "interestRate": "8.2",
+      "term": "12 months"
+    }
+  ]
+} 
