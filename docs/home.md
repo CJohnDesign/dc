@@ -5,6 +5,7 @@ This document outlines the requirements for the Deliver Capital homepage redesig
 
 ## Brand Identity
 - **Primary Brand Color**: #223f47 (dark teal)
+- **Background Brand Color**: #E8E7E7 (Cream)
 - **Brand Voice**: Professional, supportive, educational, and results-oriented
 - **Target Audience**: Small business owners looking for growth capital and financial optimization
 

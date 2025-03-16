@@ -1,11 +1,34 @@
-import React from 'react';
-import { Metadata } from 'next';
-import '../globals.css';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Funding Portal | Deliver Capital',
-  description: 'Access your business funding portal to track your application status and optimize your financial profile.',
-};
+import React from 'react';
+
+// Define font CSS variables for the subdomain
+const fontStyles = `
+  :root {
+    --font-geist-sans: 'Geist Sans', system-ui, -apple-system, sans-serif;
+    --font-geist-mono: 'Geist Mono', monospace;
+    --font-rethink-sans: 'Rethink Sans', system-ui, -apple-system, sans-serif;
+    --font-merriweather: 'Merriweather', Georgia, serif;
+    
+    /* Ensure these CSS variables are defined for use in other components */
+    --body-font: var(--font-geist-sans);
+    --heading-font: var(--font-rethink-sans);
+    --numeric-font: var(--font-merriweather);
+  }
+  
+  /* Apply fonts to elements */
+  body {
+    font-family: var(--body-font);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+  }
+  
+  .numeric {
+    font-family: var(--numeric-font);
+  }
+`;
 
 export default function FundLayout({
   children,
@@ -13,33 +36,13 @@ export default function FundLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-[var(--background-alt)]">
-        <header className="bg-[var(--primary)] text-white py-4">
-          <div className="container mx-auto px-4 flex justify-between items-center">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold">Deliver Capital</h1>
-              <span className="ml-2 px-2 py-1 bg-white/20 rounded-md text-sm">Funding Portal</span>
-            </div>
-            <nav>
-              <ul className="flex space-x-6">
-                <li><a href="/fund/dashboard" className="hover:underline">Dashboard</a></li>
-                <li><a href="/fund/profile" className="hover:underline">Profile</a></li>
-                <li><a href="/fund/documents" className="hover:underline">Documents</a></li>
-                <li><a href="/fund/support" className="hover:underline">Support</a></li>
-              </ul>
-            </nav>
-          </div>
-        </header>
-        <main className="container mx-auto px-4 py-8">
-          {children}
-        </main>
-        <footer className="bg-[var(--secondary)] text-white py-4 mt-auto">
-          <div className="container mx-auto px-4 text-center">
-            <p>&copy; {new Date().getFullYear()} Deliver Capital. All rights reserved.</p>
-          </div>
-        </footer>
-      </body>
-    </html>
+    <>
+      {/* Define font variables for this layout */}
+      <style jsx global>{fontStyles}</style>
+      
+      <div className="min-h-screen bg-[var(--background-alt)]">
+        {children}
+      </div>
+    </>
   );
 } 
