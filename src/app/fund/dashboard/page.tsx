@@ -5,6 +5,7 @@ import DashboardLayout from './DashboardLayout';
 import CreditActionCard from './components/CreditActionCard';
 import CreditSummaryPanel from './components/CreditSummaryPanel';
 import AccountsTable from './components/AccountsTable';
+import ProgramOfferCards from './components/ProgramOfferCards';
 import { getCreditActionItems, getCreditSummary, getAccounts } from './utils/dataProvider';
 
 export default function FundDashboardPage() {
@@ -23,6 +24,9 @@ export default function FundDashboardPage() {
             Refresh Data
           </button>
         </div>
+
+        {/* Program Offers */}
+        <ProgramOfferCards />
 
         {/* Main Dashboard Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

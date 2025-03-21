@@ -182,6 +182,14 @@ export const getCreditSummary = (): CreditSummary => {
                                  utilization > 50 ? Math.ceil(activeTradelines * 0.5) : 
                                  utilization > 30 ? Math.ceil(activeTradelines * 0.25) : 0;
   
+  // Format today's date as Mar 28, 2024
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+  
   return {
     score,
     scoreRating: getScoreRating(score),
@@ -190,7 +198,8 @@ export const getCreditSummary = (): CreditSummary => {
     highUtilizationCount: highUtilizationEstimate,
     negativeItemsCount: 2, // Estimated based on poor credit score
     profileAge: debbieSmithData.additionalInfo.age_of_oldest_tl,
-    inquiryCount: parseInt(debbieSmithData.additionalInfo.inquiries, 10)
+    inquiryCount: parseInt(debbieSmithData.additionalInfo.inquiries, 10),
+    lastUpdated: formattedDate
   };
 };
 

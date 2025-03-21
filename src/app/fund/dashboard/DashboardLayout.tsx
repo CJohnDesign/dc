@@ -14,6 +14,7 @@ import {
   LucideIcon,
   ChevronsRight,
   ChevronsLeft,
+  CreditCard
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -39,10 +40,8 @@ export default function DashboardLayout({
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const navItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', href: '/fund/dashboard' },
-    { icon: Users, label: 'Customers', href: '/fund/dashboard/customers' },
-    { icon: FileText, label: 'Documents', href: '/fund/dashboard/documents' },
-    { icon: Settings, label: 'Settings', href: '/fund/dashboard/settings' },
+    { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
+    { icon: CreditCard, label: 'Programs', href: '/dashboard/programs' },
   ];
 
   return (
@@ -58,25 +57,27 @@ export default function DashboardLayout({
         {/* Logo and Toggle */}
         <div className="flex items-center h-16 px-4 border-b border-gray-200">
           <div className="flex items-center">
-            {!isCollapsed ? (
-              <Image
-                src="/dc_logo.png"
-                alt="Deliver Capital"
-                width={120}
-                height={32}
-                className="h-8 w-auto object-contain"
-                priority
-              />
-            ) : (
-              <Image
-                src="/dc_logo.png"
-                alt="Deliver Capital"
-                width={32}
-                height={32}
-                className="h-8 w-8 object-contain"
-                priority
-              />
-            )}
+            <Link href="/dashboard">
+              {!isCollapsed ? (
+                <Image
+                  src="/dc_logo.png"
+                  alt="Deliver Capital"
+                  width={120}
+                  height={32}
+                  className="h-8 w-auto object-contain"
+                  priority
+                />
+              ) : (
+                <Image
+                  src="/dc_logo.png"
+                  alt="Deliver Capital"
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 object-contain"
+                  priority
+                />
+              )}
+            </Link>
           </div>
           <button 
             onClick={() => setIsCollapsed(!isCollapsed)}

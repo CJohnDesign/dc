@@ -37,13 +37,13 @@ export const CreditActionCard: React.FC<CreditActionCardProps> = ({ item }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'warning':
-        return 'border-red-200 bg-red-50';
+        return 'text-red-500 ring-red-200';
       case 'caution':
-        return 'border-amber-200 bg-amber-50';
+        return 'text-amber-500 ring-amber-200';
       case 'good':
-        return 'border-green-200 bg-green-50';
+        return 'text-green-500 ring-green-200';
       default:
-        return 'border-blue-200 bg-blue-50';
+        return 'text-blue-500 ring-blue-200';
     }
   };
 
@@ -60,24 +60,39 @@ export const CreditActionCard: React.FC<CreditActionCardProps> = ({ item }) => {
     }
   };
 
+  const getIconBackground = (status: string) => {
+    switch (status) {
+      case 'warning':
+        return 'bg-red-50';
+      case 'caution':
+        return 'bg-amber-50';
+      case 'good':
+        return 'bg-green-50';
+      default:
+        return 'bg-blue-50';
+    }
+  };
+
   return (
-    <div className={`rounded-xl border p-4 mb-4 ${getStatusColor(item.status)}`}>
+    <div className="rounded-xl border border-gray-200 p-5 mb-4 bg-white shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-1">
       <div className="flex justify-between items-start">
-        <div className="flex items-start gap-3">
-          <div className="mt-1">{getStatusIcon(item.status)}</div>
+        <div className="flex items-start gap-4">
+          <div className={`rounded-full p-2.5 ${getIconBackground(item.status)} flex-shrink-0`}>
+            {getStatusIcon(item.status)}
+          </div>
           <div>
             <h4 className="text-base font-heading font-bold text-[#1e3a4f]">{getTypeTitle(item.type)}</h4>
-            <p className="text-sm mt-1">
+            <p className="text-sm mt-1.5">
               Current: <span className="font-medium">{item.metric}</span> | Target: <span className="font-medium">{item.threshold}</span>
             </p>
-            <p className="text-sm opacity-80 mt-1">
-              Impact: <span className="font-medium">{item.impact}</span>
+            <p className="text-sm text-gray-600 mt-1">
+              Impact: <span className={`font-medium ${getStatusColor(item.status)}`}>{item.impact}</span>
             </p>
           </div>
         </div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="p-1 rounded-full hover:bg-black/5"
+          className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
           aria-expanded={isExpanded}
           aria-label={isExpanded ? "Collapse details" : "Expand details"}
         >
@@ -86,20 +101,20 @@ export const CreditActionCard: React.FC<CreditActionCardProps> = ({ item }) => {
       </div>
 
       {isExpanded && (
-        <div className="mt-4 pl-9">
-          <h5 className="font-bold text-sm mb-2">How to Fix:</h5>
+        <div className="mt-5 pl-12 pt-3 border-t border-gray-100">
+          <h5 className="font-bold text-sm mb-3">How to Fix:</h5>
           {item.actions.map((action, index) => (
-            <div key={index} className="mb-3">
-              <p className="font-medium text-sm">{action.title}</p>
-              <p className="text-sm opacity-80 mb-2">{action.description}</p>
-              <ul className="list-disc pl-5 text-sm space-y-1">
+            <div key={index} className="mb-4">
+              <p className="font-medium text-sm text-[#1e3a4f]">{action.title}</p>
+              <p className="text-sm text-gray-600 mb-2">{action.description}</p>
+              <ul className="list-disc pl-5 text-sm space-y-1.5 text-gray-700">
                 {action.steps.map((step, stepIndex) => (
                   <li key={stepIndex}>{step}</li>
                 ))}
               </ul>
             </div>
           ))}
-          <button className="mt-2 text-sm font-medium text-[#1e3a4f] hover:underline">
+          <button className="mt-2 text-sm font-medium px-3 py-1.5 rounded-md bg-gray-100 text-[#1e3a4f] hover:bg-gray-200 transition-colors">
             Mark as Addressed
           </button>
         </div>

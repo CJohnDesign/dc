@@ -1,0 +1,50 @@
+[
+  {
+    "id": "credit-card",
+    "title": "Credit Card Program",
+    "amount": "50,000",
+    "shortDescription": "Access up to $50,000 in credit through our flexible credit card program.",
+    "description": "Access up to $50,000 in credit through our flexible credit card program. Enjoy competitive rates, extensive rewards programs, and premium benefits designed to fit your spending and lifestyle needs. Ideal for both personal and business expenses, it provides convenience and purchasing power whenever you need it.",
+    "iconType": "CreditCard",
+    "iconColor": "#6366f1",
+    "keyFeatures": [
+      "High credit limit up to $50,000",
+      "Competitive APR rates",
+      "Rewards and cashback options",
+      "Secure online and mobile access",
+      "Fraud protection services"
+    ]
+  },
+  {
+    "id": "business-loan",
+    "title": "Business Loan Program",
+    "amount": "250,000",
+    "shortDescription": "Tailored loan packages for entrepreneurs and business owners seeking growth capital.",
+    "description": "Our Business Loan Program is crafted specifically for entrepreneurs and business owners seeking growth capital, operational funds, or expansion investments. Tailored loan packages, flexible repayment terms, and quick approvals help you propel your business to new heights with minimal hassle.",
+    "iconType": "Store",
+    "iconColor": "#4f46e5",
+    "keyFeatures": [
+      "Customized loan options based on your business needs",
+      "Competitive interest rates",
+      "Fast approval and funding process",
+      "Flexible repayment terms",
+      "Dedicated business loan support"
+    ]
+  },
+  {
+    "id": "personal-loan",
+    "title": "Personal Loan Program",
+    "amount": "125,000",
+    "shortDescription": "Obtain the funds you need quickly through our Personal Loan Program.",
+    "description": "Obtain the funds you need quickly and efficiently through our Personal Loan Program. Perfect for debt consolidation, home improvements, medical expenses, or unexpected financial needs. Experience transparent terms, competitive rates, and a straightforward application process.",
+    "iconType": "User",
+    "iconColor": "#818cf8",
+    "keyFeatures": [
+      "Fast and easy application",
+      "Flexible amounts and repayment schedules",
+      "Low, fixed interest rates",
+      "No hidden fees",
+      "Personalized customer support"
+    ]
+  }
+] 
