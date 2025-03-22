@@ -1,0 +1,2877 @@
+openapi: 3.0.0
+info:
+  title: Deliver Capital API v4 PQ CRM
+  description: API documentation for Deliver Capital v4.
+  version: 1.0.0-oas3
+servers:
+  - url: https://pq-crm-stage.avmdemo.com/custom/service/v4_1_custom/rest.php
+    description: PQ CRM Staging environment
+paths:
+  /login:
+    get:
+      summary: DC Login
+      description: Login to SuiteCRM and obtain session token.
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: JSON
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: login
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: JSON
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {"user_auth":{"user_name":"admin","password":"admin","encryption":"PLAIN"},"application":"Autobot"}
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+  
+  /get_entry:
+    get:
+      summary: "Get Entry for Lead"
+      description: "Retrieves a single Lead entry by ID."
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_entry"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {
+              "session": "3saf5n9u2gn6ihthqkuttc8aim",
+              "module_name": "Leads",
+              "id": "6e0be419-5bcc-9a80-0efc-64f859a37a88",
+              "offset": 0,
+              "select_fields": [],
+              "link_name_to_fields_array": [],
+              "max_results": 1,
+              "deleted": "false"
+            }
+      responses:
+        '200':
+          description: "Single Lead entry retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  entry:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "6e0be419-5bcc-9a80-0efc-64f859a37a88"
+                      first_name:
+                        type: string
+                        example: "John"
+                      last_name:
+                        type: string
+                        example: "Doe"
+                      email:
+                        type: string
+                        example: "john.doe@example.com"
+        '404':
+          description: "Lead entry not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "No matching record found with the specified ID."
+                    
+  /get_entries:
+    get:
+      summary: "Retrieve Multiple Entries"
+      description: "Fetches multiple records by IDs from the specified module."
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_entries"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {
+              "session": "your_session_id",
+              "module_name": "Leads",
+              "ids": ["id1", "id2"],
+              "select_fields": ["first_name", "last_name"]
+            }
+      responses:
+        '200':
+          description: "Entries retrieved successfully."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    first_name:
+                      type: string
+                    last_name:
+                      type: string
+
+  /get_entry_list:
+    get:
+      summary: "Get Entry List for Leads"
+      description: "Retrieves a list of Leads entries matching the specified query."
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_entry_list"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {
+              "session": "3saf5n9u2gn6ihthqkuttc8aim",
+              "module_name": "Leads",
+              "query": "leads.last_name = 'testt'",
+              "order_by": "",
+              "offset": "",
+              "select_fields": ["id", "first_name", "last_name"],
+              "link_name_to_fields_array": [],
+              "max_results": 0,
+              "deleted": "false"
+            }
+      responses:
+        '200':
+          description: "List of Leads retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  result_count:
+                    type: integer
+                    example: 5
+                  next_offset:
+                    type: integer
+                    example: 0
+                  entry_list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "3saf5n9u2gn6ihthqkuttc8aim"
+                        first_name:
+                          type: string
+                          example: "John"
+                        last_name:
+                          type: string
+                          example: "Doe"
+        '404':
+          description: "No entries found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "No matching records found for the query."
+  
+  /set_entry:
+    post:
+      summary: "Create or Update a Single Entry"
+      description: "Creates or updates a single record in the specified module."
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "set_entry"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {
+              "session": "your_session_id",
+              "module_name": "Leads",
+              "name_value_list": {
+                "first_name": "John",
+                "last_name": "Doe"
+              }
+            }
+      responses:
+        '200':
+          description: "Entry created or updated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "unique_record_id"
+  /set_entries:
+    post:
+      summary: "Create or Update Multiple Entries"
+      description: "Creates or updates multiple records in the specified module."
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "set_entries"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {
+              "session": "your_session_id",
+              "module_name": "Leads",
+              "name_value_lists": [
+                {"first_name": "John", "last_name": "Doe"},
+                {"first_name": "Jane", "last_name": "Smith"}
+              ]
+            }
+      responses:
+        '200':
+          description: "Entries created or updated successfully."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "unique_record_id"
+
+  /manual_login:
+    get:
+      summary: "Manual Login for Brokers"
+      description: "Authenticates a broker using username and password."
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "manual_login"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {
+              "session": "your_session_id",
+              "params": {
+                "username_c": "example_user",
+                "password_c": "example_password"
+              }
+            }
+      responses:
+        '200':
+          description: "Successful login"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "b1b27f8b-bd18-40ab-a8b4-0f93a735ca18"
+                  username_c:
+                    type: string
+                    example: "example_user"
+                  broker_details:
+                    type: object
+                    additionalProperties: true
+        '401':
+          description: "Invalid credentials or unauthorized access"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Unauthorized access. Invalid credentials."      
+                    
+  /manual_lead_login:
+    get:
+      summary: "Manual Login for Leads"
+      description: "Authenticates a lead using username and password."
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "manual_lead_login"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {
+              "session": "your_session_id",
+              "params": {
+                "username_c": "lead_username",
+                "password_c": "lead_password"
+              }
+            }
+      responses:
+        '200':
+          description: "Successful lead login"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "a0b27e8a-dc28-48ab-a7c4-3f93a735cb45"
+                  first_name:
+                    type: string
+                    example: "John"
+                  last_name:
+                    type: string
+                    example: "Doe"
+        '401':
+          description: "Invalid credentials or unauthorized access"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Unauthorized access. Invalid credentials."
+                    
+  /get_broker_details:
+      get:
+        summary: "Get Broker Details"
+        description: "Retrieves details of a broker by ID."
+        parameters:
+          - in: query
+            name: session
+            required: true
+            schema:
+              type: string
+            example: "3saf5n9u2gn6ihthqkuttc8aim"  # Example session ID
+          - in: query
+            name: input_type
+            required: true
+            schema:
+              type: string
+            example: "JSON"  # Specifies that the input data is in JSON format
+          - in: query
+            name: method
+            required: true
+            schema:
+              type: string
+            example: "get_broker_details"  # The method being called
+          - in: query
+            name: response_type
+            required: true
+            schema:
+              type: string
+            example: "JSON"  # Specifies that the expected response is in JSON format
+          - in: query
+            name: rest_data
+            required: true
+            schema:
+              type: string
+            example: '{"session":"3saf5n9u2gn6ihthqkuttc8aim","params":{"id":"20f66d24-f9d5-018b-9710-65b3fe3bb78a"}}'  # JSON formatted string with session and parameters
+        responses:
+          '200':
+            description: "Broker details retrieved successfully"
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                      example: true
+                    data:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "20f66d24-f9d5-018b-9710-65b3fe3bb78a"  # Example broker ID
+                        name:
+                          type: string
+                          example: "Jane Doe"  # Example broker name
+                        email:
+                          type: string
+                          example: "janedoe@example.com"  # Example broker email
+                        phone:
+                          type: string
+                          example: "+1234567890"  # Example broker phone number
+          '404':
+            description: "Broker not found"
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                      example: false
+                    error:
+                      type: string
+                      example: "Broker not found"  # Error message when a broker cannot be found
+  /get_broker_count:
+    get:
+      summary: "Get Broker Count"
+      description: "Retrieves the count of leads associated with a broker by ID."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "d6jfr6hmssfbksiis2a7rh16ve"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the input data is in JSON format
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_broker_count"  # The method being called
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the expected response is in JSON format
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"d6jfr6hmssfbksiis2a7rh16ve","params":{"id":"20f66d24-f9d5-018b-9710-65b3fe3bb78a"}}'  # JSON formatted string with session and parameters
+      responses:
+        '200':
+          description: "Broker count retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      total_count:
+                        type: integer
+                        example: 42  # Example total count of leads
+                      business_application:
+                        type: integer
+                        example: 25  # Example count for business applications
+                      personal_application:
+                        type: integer
+                        example: 17  # Example count for personal applications
+        '404':
+          description: "Broker not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Broker not found"  # Error message when a broker cannot be found
+
+  /get_associated_leads:
+    get:
+      summary: "Get Associated Leads"
+      description: "Retrieves leads associated with a broker by ID."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "d6jfr6hmssfbksiis2a7rh16ve"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the input data is in JSON format
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_associated_leads"  # The method being called
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the expected response is in JSON format
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"d6jfr6hmssfbksiis2a7rh16ve","params":{"id":"20f66d24-f9d5-018b-9710-65b3fe3bb78a"}}'  # JSON formatted string with session and parameters
+      responses:
+        '200':
+          description: "Associated leads retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lead_id:
+                          type: string
+                          example: "4c35978a-0aec-7b36-1747-5e540def5546"  # Example lead ID
+                        first_name:
+                          type: string
+                          example: "John"  # Example lead first name
+                        last_name:
+                          type: string
+                          example: "Doe"  # Example lead last name
+                        email:
+                          type: string
+                          example: "johndoe@example.com"  # Example lead email
+                        phone:
+                          type: string
+                          example: "+1234567890"  # Example lead phone
+                        status:
+                          type: string
+                          example: "In Progress"  # Example lead status
+        '404':
+          description: "No leads found for the broker"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "No leads found for the broker"  # Error message when no leads are found
+
+  /get_associated_notes:
+    get:
+      summary: "Get Associated Notes"
+      description: "Retrieves notes associated with a specific entity by parent ID."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "d6jfr6hmssfbksiis2a7rh16ve"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the input data is in JSON format
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_associated_notes"  # The method being called
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the expected response is in JSON format
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"d6jfr6hmssfbksiis2a7rh16ve","params":{"query":"", "limit": ""}}'
+      responses:
+        '200':
+          description: "Associated notes retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        note_id:
+                          type: string
+                          example: "4c35978a-0aec-7b36-1747-5e540def5546"  # Example note ID
+                        subject:
+                          type: string
+                          example: "Meeting notes"  # Example note subject
+                        description:
+                          type: string
+                          example: "Details about the meeting..."  # Example note description
+                        date_created:
+                          type: string
+                          format: date-time
+                          example: "2024-11-01T12:34:56Z"  # Example note creation date
+        '404':
+          description: "No notes found for the specified parent ID"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "No notes found for the specified parent ID"  # Error message when no notes are found
+  
+  /get_file:
+    get:
+      summary: "Get File"
+      description: "Retrieves a file associated with a specific record ID."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "d6jfr6hmssfbksiis2a7rh16ve"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the input data is in JSON format
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_file"  # The method being called
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the expected response is in JSON format
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"d6jfr6hmssfbksiis2a7rh16ve","recordId":"eb71c90f-7cc0-4638-60df-6666a898c78b"}'
+      responses:
+        '200':
+          description: "File retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  file:
+                    type: object
+                    properties:
+                      file_id:
+                        type: string
+                        example: "eb71c90f-7cc0-4638-60df-6666a898c78b"  # Example file ID
+                      file_name:
+                        type: string
+                        example: "document.pdf"  # Example file name
+                      file_data:
+                        type: string
+                        format: byte
+                        example: "Base64EncodedFileData"  # Base64-encoded file data
+                      mime_type:
+                        type: string
+                        example: "application/pdf"  # Example MIME type of the file
+        '404':
+          description: "File not found for the specified record ID"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "File not found for the specified record ID"  # Error message for missing file
+
+  /check_email_exist:
+    get:
+      summary: "Check Email Existence"
+      description: "Checks if an email exists in a specified module."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "d6jfr6hmssfbksiis2a7rh16ve"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the input data is in JSON format
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "check_email_exist"  # The method being called
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the expected response is in JSON format
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"d6jfr6hmssfbksiis2a7rh16ve","params":{"module_name": "Leads", "email": "test_HANNAH@mailinator.com"}}'
+      responses:
+        '200':
+          description: "Email existence check successful"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  exists:
+                    type: boolean
+                    example: true  # Indicates whether the email exists
+                  record_id:
+                    type: string
+                    example: "b14f9e92-c4d6-5fcb-a52e-93dfcd95cb3a"  # Example record ID if the email exists
+        '404':
+          description: "Email not found in the specified module"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Email not found in the specified module"  # Error message for when email does not exist
+
+  /change_password:
+    get:
+      summary: "Change Broker Password"
+      description: "Changes the broker's password and sends an email with new credentials."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies JSON input format
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "change_password"  # Method being called
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies JSON response format
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"8lalb3srcmsbs1u1jgpkld80se","params":{"module_name":"dc_brokers","email":"broker@example.com"}}'
+      responses:
+        '200':
+          description: "Password changed and email sent successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Email Sent Successfully. Please check Your Email"
+        '400':
+          description: "Error in changing password or sending email"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Email Not Sent! Contact Your Administrator"
+
+  /off_shore_script:
+    post:
+      summary: "Offshore Script"
+      description: "Creates or updates a lead and optionally schedules a task if an appointment is booked."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies JSON input format
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "off_shore_script"  # Method being called
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies JSON response format
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"8lalb3srcmsbs1u1jgpkld80se","params":{"lead_field_1":"value_1","lead_field_2":"value_2","appointment":"appointment","assigned_user_id":"user_id"}}'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lead_fields:
+                  type: object
+                  example: 
+                    lead_field_1: "value_1"
+                    lead_field_2: "value_2"
+                appointment:
+                  type: string
+                  example: "appointment"  # Specify "appointment" to trigger task creation
+                assigned_user_id:
+                  type: string
+                  example: "user_id"  # ID of the assigned user for the task
+      responses:
+        '200':
+          description: "Lead created/updated successfully, and task created if appointment booked"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Lead saved and task created for appointment"
+        '400':
+          description: "Error in processing request"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Failed to create lead or task"
+
+  /get_documents:
+    get:
+      summary: "Get Documents for Lead"
+      description: "Retrieves requested documents for a given lead ID in the specified module."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the input data is in JSON format
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_documents"  # Method being called
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"  # Specifies that the expected response is in JSON format
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"8lalb3srcmsbs1u1jgpkld80se","params":{"module":"Leads","lead_id":"4c35978a-0aec-7b36-1747-5e540def5546"}}'
+      responses:
+        '200':
+          description: "Documents retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  documantsAvailable:
+                    type: boolean
+                    example: true
+                  documents:
+                    type: object
+                    additionalProperties:
+                      type: string
+                    example:
+                      Document1: "ID1"
+                      Document2: "ID2"
+                  name:
+                    type: string
+                    example: "John Doe"  # Example lead name
+        '404':
+          description: "No documents found or lead not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  documantsAvailable:
+                    type: boolean
+                    example: false
+
+  /pqe_submission:
+    get:
+      summary: "PQE Submission"
+      description: "Submits or updates a lead for PQE processing."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "pqe_submission"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "lead_id": "4c35978a-0aec-7b36-1747-5e540def5546", 
+                "first_name": "John",
+                "last_name": "Doe",
+                "primary_address_street": "123 Main St",
+                "primary_address_city": "Cityville",
+                "primary_address_state": "CA",
+                "primary_address_postalcode": "90210",
+                "email": "john.doe@example.com",
+                "ssn_c": "123-45-6789"
+              }
+            }
+      responses:
+        '200':
+          description: "PQE submission processed successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '400':
+          description: "PQE submission failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid session or data"
+                    
+  /get_bds_form_data:
+    get:
+      summary: "Get BDS Form Data"
+      description: "Retrieves BDS form data associated with a lead."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_bds_form_data"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "lead_id": "4c35978a-0aec-7b36-1747-5e540def5546",
+                "lead_data": "field1,field2",
+                "dc_personal_financial_statement": "financial_field1,financial_field2",
+                "dc_cash_in_banks": "cash_field1,cash_field2",
+                "dc_listed_securities": "security_field1,security_field2",
+                "dc_personal_assets": "asset_field1,asset_field2",
+                "dc_existing_personal_debt_schedule": "debt_field1,debt_field2",
+                "dc_existing_business_debt_schedule": "business_debt_field1,business_debt_field2"
+              }
+            }
+      responses:
+        '200':
+          description: "BDS form data retrieved successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  lead_data:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  dc_personal_financial_statement:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  dc_cash_in_banks:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties:
+                        type: string
+                  dc_listed_securities:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties:
+                        type: string
+                  dc_personal_assets:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties:
+                        type: string
+                  dc_existing_personal_debt_schedule:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties:
+                        type: string
+                  dc_existing_business_debt_schedule:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties:
+                        type: string
+        '404':
+          description: "BDS form data not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "No data found for the provided lead."
+
+  /submit_bds_pfs_form_data:
+    get:
+      summary: "Submit BDS PFS Form Data"
+      description: "Submits BDS PFS form data and updates the lead or opportunity record accordingly."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "submit_bds_pfs_form_data"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "module": "Leads",
+                "id": "4c35978a-0aec-7b36-1747-5e540def5546",
+                "field_to_check": "field_name_to_check"
+              }
+            }
+      responses:
+        '200':
+          description: "BDS PFS form data submitted successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "BDS PFS form data submitted and documents updated."
+        '404':
+          description: "Record not found or session invalid"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid session or record not found."
+
+  /get_bds_pfs_status:
+    get:
+      summary: "Get BDS PFS Form Status"
+      description: "Checks the status of the BDS PFS form for a given lead."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_bds_pfs_status"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "lead_id": "4c35978a-0aec-7b36-1747-5e540def5546"
+              }
+            }
+      responses:
+        '200':
+          description: "BDS PFS form status retrieved successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  bds_pfs_form_status:
+                    type: boolean
+                    example: true  # Indicates whether the form is completed
+        '404':
+          description: "Lead not found or session invalid"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid session or lead not found."
+
+  /customer_protal_signup:
+    get:
+      summary: "Customer Portal Signup"
+      description: "Handles customer portal signup by verifying and registering customer credentials."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "customer_portal_signup"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "username_c": "test_user@example.com",
+                "password_c": "securepassword"
+              }
+            }
+      responses:
+        '200':
+          description: "Customer portal signup completed successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  id:
+                    type: string
+                    example: "4c35978a-0aec-7b36-1747-5e540def5546"  # Example lead ID
+                  msg:
+                    type: string
+                    example: "Signup successful"
+        '400':
+          description: "Error during signup process"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: "Email is already registered or invalid email provided."
+
+  /customer_portal_login:
+    get:
+      summary: "Customer Portal Login"
+      description: "Handles customer login to the portal with optional two-factor authentication."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "customer_portal_login"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "username_c": "test_user@example.com",
+                "password_c": "securepassword",
+                "two_factor_auth_id": "example_two_fa_id"
+              }
+            }
+      responses:
+        '200':
+          description: "Login completed successfully with or without two-factor authentication."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  id:
+                    type: string
+                    example: "4c35978a-0aec-7b36-1747-5e540def5546"  # Example lead ID
+                  two_fa_check:
+                    type: boolean
+                    example: true  # Indicates if two-factor authentication was used
+                  msg:
+                    type: string
+                    example: "Login successful with two-factor authentication."
+        '400':
+          description: "Error during login"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: "Invalid Email or Password"
+
+  /change_password_customer_portal:
+    get:
+      summary: "Change Customer Portal Password"
+      description: "Initiates the password reset process for a customer portal account."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "change_password_customer_portal"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "module_name": "Leads",
+                "username_c": "test_user@example.com"
+              }
+            }
+      responses:
+        '200':
+          description: "Password reset initiated successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: "reset password success"
+        '400':
+          description: "Password reset failed."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: "Email Does not Match"
+
+  /set_password_customer_portal:
+    post:
+      summary: "Set Customer Portal Password"
+      description: "Sets a new password for the customer portal if the reset password link is still valid."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "set_password_customer_portal"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "module_name": "Leads",
+                "lead_id": "4c35978a-0aec-7b36-1747-5e540def5546",
+                "password_c": "new_password123"
+              }
+            }
+      responses:
+        '200':
+          description: "Password set successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '400':
+          description: "Failed to set password."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: "The link has expired"
+
+  /customer_portal_twofa:
+    post:
+      summary: "Customer Portal Two-Factor Authentication"
+      description: "Verifies the two-factor authentication (2FA) code for the customer portal."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "customer_portal_twofa"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "module_name": "Leads",
+                "lead_id": "4c35978a-0aec-7b36-1747-5e540def5546",
+                "twofa_code": "123456",
+                "remember_me": "on"
+              }
+            }
+      responses:
+        '200':
+          description: "2FA verification successful"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  two_factor_id:
+                    type: string
+                    example: "d6jfr6hmssfbksiis2a7rh16ve"
+                  msg:
+                    type: string
+                    example: "OTP Verified Successfully"
+        '400':
+          description: "2FA verification failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: "OTP Expired! Please Generate New OTP"
+
+  /request_two_factor_again:
+    post:
+      summary: "Request Two-Factor Authentication Code Again"
+      description: "Requests a new 2FA code for the customer portal."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "request_two_factor_again"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "module_name": "Leads",
+                "lead_id": "4c35978a-0aec-7b36-1747-5e540def5546"
+              }
+            }
+      responses:
+        '200':
+          description: "2FA code requested successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "New OTP sent successfully"
+        '400':
+          description: "Failed to request 2FA code"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Unable to send OTP, please try again"
+                    
+  /get_customer_data:
+    post:
+      summary: "Get Customer Data"
+      description: "Retrieves customer data for the specified lead ID and origin."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_customer_data"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "origin": "web_portal",
+                "leadID": "4c35978a-0aec-7b36-1747-5e540def5546"
+              }
+            }
+      responses:
+        '200':
+          description: "Customer data retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    example:
+                      name: "John Doe"
+                      email: "johndoe@example.com"
+                      phone: "+1234567890"
+                      address: "123 Main St, City, State"
+        '404':
+          description: "Customer data not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Customer data not found for the provided lead ID"
+  /get_pq_document:
+    post:
+      summary: "Get PQ Document"
+      description: "Retrieves the latest PQ PDF Summary document associated with a lead ID.\n Origins \n1.credit_evaluation \n2.account_details \na3.ccount_details \n4.inquiries \n5.derogatoryitems \n6.solution_center"
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_pq_document"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "params": {
+                "lead_id": "4c35978a-0aec-7b36-1747-5e540def5546"
+              }
+            }
+      responses:
+        '200':
+          description: "Document data retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: "true"
+                  document_name:
+                    type: string
+                    example: "PQ Summary Document"
+                  document_revision_id:
+                    type: string
+                    example: "rev12345"
+                  template_type:
+                    type: string
+                    example: "PQ PDF Summary"
+                  file_mime_type:
+                    type: string
+                    example: "application/pdf"
+                  file_ext:
+                    type: string
+                    example: "pdf"
+                  filename:
+                    type: string
+                    example: "summary_document.pdf"
+                  preview:
+                    type: string
+                    example: "no"
+                  file_content:
+                    type: string
+                    example: "base64encodedcontent=="
+        '404':
+          description: "Document not found for the provided lead ID"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: "false"
+                  error:
+                    type: string
+                    example: "No document found for the specified lead ID"
+                    
+  /set_metting_for_lead:
+    post:
+      summary: "Set Meeting for Lead"
+      description: "Creates a meeting for a lead based on provided email and meeting details."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "set_metting_for_lead"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: |
+            {
+              "session": "8lalb3srcmsbs1u1jgpkld80se",
+              "data": {
+                "event": "invitee.created",
+                "payload": {
+                  "email": "lead@example.com",
+                  "name": "Lead Meeting",
+                  "scheduled_event": {
+                    "start_time": "2024-11-10T09:00:00",
+                    "end_time": "2024-11-10T10:30:00"
+                  },
+                  "questions_and_answers": [
+                    {
+                      "answer": "Meeting details description"
+                    }
+                  ]
+                }
+              }
+            }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session:
+                  type: string
+                  example: "8lalb3srcmsbs1u1jgpkld80se"
+                data:
+                  type: object
+                  properties:
+                    event:
+                      type: string
+                      example: "invitee.created"
+                    payload:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                          example: "lead@example.com"
+                        name:
+                          type: string
+                          example: "Lead Meeting"
+                        scheduled_event:
+                          type: object
+                          properties:
+                            start_time:
+                              type: string
+                              format: date-time
+                              example: "2024-11-10T09:00:00"
+                            end_time:
+                              type: string
+                              format: date-time
+                              example: "2024-11-10T10:30:00"
+                        questions_and_answers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              answer:
+                                type: string
+                                example: "Meeting details description"
+      responses:
+        '200':
+          description: "Meeting created successfully for the lead"
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+        '404':
+          description: "Lead not found or unable to create meeting"
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: false
+
+  /check_phone_exist:
+    get:
+      summary: "Check if Phone Number Exists"
+      description: "Checks if a phone number already exists in a specified module (e.g., Leads)."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "check_phone_exist"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"8lalb3srcmsbs1u1jgpkld80se","params":{"phone_mobile":"1234567890","module_name":"Leads"}}'
+      responses:
+        '200':
+          description: "Phone existence check result"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exists:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Phone number exists in the module."
+        '404':
+          description: "Phone number not found in the specified module"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exists:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Phone number not found in the module."
+
+  /delete_broker_logo:
+    get:
+      summary: "Delete Broker Logo"
+      description: "Deletes the logo of a broker by removing the corresponding file from the server."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "delete_broker_logo"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"8lalb3srcmsbs1u1jgpkld80se","params":{"id":"broker_id"}}'
+      responses:
+        '200':
+          description: "Broker logo deletion result"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: "Indicates if the logo deletion was successful."
+        '404':
+          description: "Broker logo not found or failed to delete"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    description: "Indicates if the logo deletion failed."
+                  message:
+                    type: string
+                    example: "File not found or could not be deleted."
+
+  /create_record_for_hubspot:
+    get:
+      summary: "Create Record for HubSpot"
+      description: "Creates a new record for HubSpot and returns a unique ID for the new record."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "create_record_for_hubspot"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"8lalb3srcmsbs1u1jgpkld80se","params":{}}'
+      responses:
+        '200':
+          description: "Record created successfully with a unique ID"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "b4a3a2b4-e2ff-47e3-a35a-57b0f9e1b7b1"
+                    description: "Unique ID for the created record."
+        '404':
+          description: "Failed to create record"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    description: "Indicates if the record creation failed."
+                  message:
+                    type: string
+                    example: "Record could not be created."
+
+  /set_broker_profile_data:
+    post:
+      summary: "Set Broker Profile Data"
+      description: "Uploads and sets the broker's profile photo in SuiteCRM."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "set_broker_profile_data"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rest_data:
+                  type: object
+                  properties:
+                    session:
+                      type: string
+                      example: "8lalb3srcmsbs1u1jgpkld80se"
+                    params:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "b4a3a2b4-e2ff-47e3-a35a-57b0f9e1b7b1"
+                          description: "Broker ID."
+                        photo:
+                          type: string
+                          format: byte
+                          example: "iVBORw0KGgoAAAANSUhEUgAAAIAAAAC..."  # Base64 encoded image string
+                          description: "Base64-encoded photo data."
+      responses:
+        '200':
+          description: "Profile photo uploaded and set successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: "Indicates success status."
+        '404':
+          description: "Profile update failed"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                    description: "Indicates if the profile update failed."
+                  message:
+                    type: string
+                    example: "Profile update failed."
+
+  /get_broker_settings:
+    get:
+      summary: "Get Broker Settings"
+      description: "Retrieves the broker's outbound email settings based on the company ID."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "get_broker_settings"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: '{"session":"8lalb3srcmsbs1u1jgpkld80se","params":{"company_id":"a1b2c3d4e5f6"}}'
+      responses:
+        '200':
+          description: "Broker settings retrieved successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  settings:
+                    type: object
+                    properties:
+                      company_id:
+                        type: string
+                        example: "a1b2c3d4e5f6"
+                      smtp_server:
+                        type: string
+                        example: "smtp.example.com"
+                      smtp_user:
+                        type: string
+                        example: "user@example.com"
+                      smtp_password:
+                        type: string
+                        example: "password"
+                      smtp_port:
+                        type: integer
+                        example: 587
+                      smtp_encryption:
+                        type: string
+                        example: "TLS"
+        '404':
+          description: "Broker settings not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No settings found for the specified company ID."
+
+  /send_test_email:
+    post:
+      summary: "Send Test Email"
+      description: "Sends a test email to the specified email address using the provided SMTP settings."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "send_test_email"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session:
+                  type: string
+                  example: "8lalb3srcmsbs1u1jgpkld80se"
+                params:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: "test@example.com"
+                    smtp_settings:
+                      type: object
+                      properties:
+                        smtp_server:
+                          type: string
+                          example: "smtp.example.com"
+                        smtp_user:
+                          type: string
+                          example: "user@example.com"
+                        smtp_password:
+                          type: string
+                          example: "password"
+                        smtp_port:
+                          type: integer
+                          example: 587
+                        smtp_encryption:
+                          type: string
+                          example: "TLS"
+      responses:
+        '200':
+          description: "Test email sent successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "An email was sent to the specified email address using the provided outgoing mail settings."
+        '400':
+          description: "Test email failed to send"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Failed to send test email. Please check the SMTP settings and try again."
+
+  /send_broker_mails:
+    post:
+      summary: "Send Broker Email Instructions"
+      description: "Sends an instruction email to the broker's contact email."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "send_broker_mails"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session:
+                  type: string
+                  example: "8lalb3srcmsbs1u1jgpkld80se"
+                params:
+                  type: object
+                  properties:
+                    contact_id:
+                      type: string
+                      example: "12345678-abcd-90ef-ghij-klmnopqrstuv"  # Example contact ID
+                    company_id:
+                      type: string
+                      example: "5678abcd-90ef-ghij-klmn-1234opqrstuv"  # Example company ID
+      responses:
+        '200':
+          description: "Instruction email sent successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Instruction Email Sent Successfully."
+        '400':
+          description: "Failed to send instruction email"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Email field is missing. Please update Email."
+                    
+  /is_duplicate_email:
+    post:
+      summary: "Check for Duplicate Email"
+      description: "Checks if the specified email already exists in the given module."
+      parameters:
+        - in: query
+          name: session
+          required: true
+          schema:
+            type: string
+          example: "8lalb3srcmsbs1u1jgpkld80se"  # Example session ID
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "is_duplicate_email"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session:
+                  type: string
+                  example: "8lalb3srcmsbs1u1jgpkld80se"
+                params:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: "test@example.com"  # Example email to check
+                    module:
+                      type: string
+                      example: "Leads"  # Module name where the email will be checked
+                    field:
+                      type: string
+                      example: "email_c"  # Optional field to specify
+      responses:
+        '200':
+          description: "Duplicate email check result"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: ""  # Any message related to the result
+        '400':
+          description: "Invalid input data"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Email or module is missing."
+
+
+  /fetch_and_display_document:
+    get:
+      summary: "Fetch and Display Document"
+      description: "Fetches and displays a document based on the document ID and preview option."
+      parameters:
+        - in: query
+          name: input_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: method
+          required: true
+          schema:
+            type: string
+          example: "fetch_and_display_document"
+        - in: query
+          name: response_type
+          required: true
+          schema:
+            type: string
+          example: "JSON"
+        - in: query
+          name: rest_data
+          required: true
+          schema:
+            type: string
+          example: >-
+            {
+              "session": "3saf5n9u2gn6ihthqkuttc8aim",
+              "params": {
+                "document_id": "443f9020-610a-d2cd-ee11-670f76181cd0",
+                "preview": "yes"
+              }
+            }
+      responses:
+        '200':
+          description: "Document fetched and displayed successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: "true"
+                  document_name:
+                    type: string
+                    example: "Sample Document"
+                  document_revision_id:
+                    type: string
+                    example: "revision_id_12345"
+                  template_type:
+                    type: string
+                    example: "PDF"
+                  file_mime_type:
+                    type: string
+                    example: "application/pdf"
+                  file_ext:
+                    type: string
+                    example: "pdf"
+                  filename:
+                    type: string
+                    example: "sample_document.pdf"
+                  preview:
+                    type: string
+                    example: "yes"
+                  file_content:
+                    type: string
+                    example: "Base64_encoded_content"
+        '404':
+          description: "Document not found or error fetching document."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: "false"
+
