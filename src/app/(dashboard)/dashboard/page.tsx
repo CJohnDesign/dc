@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import DashboardLayout from './DashboardLayout';
 import CreditActionCard from './components/CreditActionCard';
 import CreditSummaryPanel from './components/CreditSummaryPanel';
 import AccountsTable from './components/AccountsTable';
@@ -15,7 +14,6 @@ export default function FundDashboardPage() {
   const accounts = getAccounts();
 
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         {/* Page Title */}
         <div className="flex items-center justify-between">
@@ -61,6 +59,5 @@ export default function FundDashboardPage() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
   );
 } 

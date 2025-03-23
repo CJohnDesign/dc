@@ -17,7 +17,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const priceId = searchParams.get('priceId');
   const inviteId = searchParams.get('inviteId');
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
-    mode === 'signin' ? signIn : signUp,
+    (_, formData) => mode === 'signin' ? signIn(formData) : signUp(formData),
     { error: '' },
   );
 

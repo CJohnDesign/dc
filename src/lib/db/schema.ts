@@ -151,12 +151,58 @@ import {
     updatedAt: timestamp('updated_at').notNull().defaultNow(),
   });
   
+  // Users table for authentication and portal access
+  export const users = pgTable('users', {
+    id: uuid('id').primaryKey(),
+    email: varchar('email', { length: 255 }).notNull().unique(),
+    firstName: varchar('first_name', { length: 100 }),
+    lastName: varchar('last_name', { length: 100 }),
+    passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+    twoFactorEnabled: boolean('two_factor_enabled').default(false),
+    twoFactorSecret: varchar('two_factor_secret', { length: 255 }),
+    lastLogin: timestamp('last_login'),
+    status: varchar('status', { length: 50 }).default('active'),
+    role: varchar('role', { length: 50 }).default('customer'),
+    suiteUserId: varchar('suite_user_id', { length: 100 }),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  });
+  
+  // User sessions for maintaining login state
+  export const userSessions = pgTable('user_sessions', {
+    id: serial('id').primaryKey(),
+    userId: uuid('user_id').notNull().references(() => users.id),
+    token: varchar('token', { length: 255 }).notNull().unique(),
+    expiresAt: timestamp('expires_at').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  });
+  
+  // Password reset tokens
+  export const passwordResetTokens = pgTable('password_reset_tokens', {
+    id: serial('id').primaryKey(),
+    userId: uuid('user_id').notNull().references(() => users.id),
+    token: varchar('token', { length: 255 }).notNull().unique(),
+    expiresAt: timestamp('expires_at').notNull(),
+    used: boolean('used').default(false),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  });
+  
+  // Add leadId to users table to link users to leads
+  export const usersToLeads = pgTable('users_to_leads', {
+    id: serial('id').primaryKey(),
+    userId: uuid('user_id').notNull().references(() => users.id),
+    leadId: uuid('lead_id').notNull().references(() => leads.id),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  });
+  
   // Relations definitions
   export const leadsRelations = relations(leads, ({ one, many }) => ({
     notes: many(notes),
     documents: many(documents),
     additionalInfo: one(leadAdditionalInfo),
     assessments: many(assessments),
+    userConnections: many(usersToLeads),
   }));
   
   export const notesRelations = relations(notes, ({ one }) => ({
@@ -198,6 +244,38 @@ import {
     }),
   }));
   
+  // Add user relations
+  export const usersRelations = relations(users, ({ many }) => ({
+    sessions: many(userSessions),
+    passwordResetTokens: many(passwordResetTokens),
+    leadConnections: many(usersToLeads),
+  }));
+  
+  export const userSessionsRelations = relations(userSessions, ({ one }) => ({
+    user: one(users, {
+      fields: [userSessions.userId],
+      references: [users.id],
+    }),
+  }));
+  
+  export const passwordResetTokensRelations = relations(passwordResetTokens, ({ one }) => ({
+    user: one(users, {
+      fields: [passwordResetTokens.userId],
+      references: [users.id],
+    }),
+  }));
+  
+  export const usersToLeadsRelations = relations(usersToLeads, ({ one }) => ({
+    user: one(users, {
+      fields: [usersToLeads.userId],
+      references: [users.id],
+    }),
+    lead: one(leads, {
+      fields: [usersToLeads.leadId],
+      references: [leads.id],
+    }),
+  }));
+  
   // Type definitions
   export type Lead = typeof leads.$inferSelect;
   export type NewLead = typeof leads.$inferInsert;
@@ -213,6 +291,14 @@ import {
   export type NewFormField = typeof formFields.$inferInsert;
   export type Assessment = typeof assessments.$inferSelect;
   export type NewAssessment = typeof assessments.$inferInsert;
+  export type User = typeof users.$inferSelect;
+  export type NewUser = typeof users.$inferInsert;
+  export type UserSession = typeof userSessions.$inferSelect;
+  export type NewUserSession = typeof userSessions.$inferInsert;
+  export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
+  export type NewPasswordResetToken = typeof passwordResetTokens.$inferInsert;
+  export type UserToLead = typeof usersToLeads.$inferSelect;
+  export type NewUserToLead = typeof usersToLeads.$inferInsert;
   
   // Lead with related data
   export type LeadWithRelatedData = Lead & {
@@ -225,4 +311,11 @@ import {
   // Form step with fields
   export type FormStepWithFields = FormStep & {
     fields: FormField[];
+  };
+  
+  // User with related data
+  export type UserWithRelatedData = User & {
+    sessions?: UserSession[];
+    passwordResetTokens?: PasswordResetToken[];
+    leads?: Lead[];
   };

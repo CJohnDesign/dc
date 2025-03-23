@@ -1,13 +1,8 @@
-import type { Metadata, Viewport } from "next";
-import { fontVariables } from "../lib/fonts";
+import type { Metadata } from "next";
 import "./globals.css";
+import { getUser } from "@/lib/auth/middleware";
+import { UserProvider } from "@/lib/auth";
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-  themeColor: '#223f47',
-}
 
 export const metadata: Metadata = {
   title: "Deliver Capital | Financial Optimization for Small Businesses",
@@ -29,16 +24,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  let userPromise = getUser();
   return (
-    <html lang="en" className={fontVariables}>
-      <body className="antialiased overflow-x-hidden">
-        <a href="#content" className="sr-only focus:not-sr-only">Skip to content</a>
-        <div id="content">
+    <html lang="en" 
+    className={`bg-white dark:bg-gray-950 text black dark:text-white $fontVariables}`}>
+      <body className="min-h-[100dvh] bg-gray-50 antialiased">
+        <UserProvider userPromise={userPromise}>
           {children}
-        </div>
+        </UserProvider>
       </body>
     </html>
   );

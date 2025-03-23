@@ -50,12 +50,14 @@ function UserMenu() {
     <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
       <DropdownMenuTrigger>
         <Avatar className="cursor-pointer size-9">
-          <AvatarImage alt={user.name || ''} />
+          <AvatarImage alt={`${user.firstName || ''} ${user.lastName || ''}`} />
           <AvatarFallback>
             {user.email
-              .split(' ')
-              .map((n: string) => n[0])
-              .join('')}
+              ? user.email
+                  .split(' ')
+                  .map((n: string) => n[0])
+                  .join('')
+              : 'U'}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

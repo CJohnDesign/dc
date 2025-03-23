@@ -1,5 +1,3 @@
-// TODO: Turn this into a server action or route handler
-
 /**
  * SuiteCRM API Client
  * 
