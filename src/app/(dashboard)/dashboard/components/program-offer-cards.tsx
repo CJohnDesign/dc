@@ -3,9 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { CreditCard, Store, User, LucideIcon, ArrowRight } from 'lucide-react';
-
-// Import the program data
-import programsData from '../data/programs.json';
+// TODO: Update this to use real data. 
+import programsData from '@/lib/db/examples/example-programs.json';
 
 // Define the icon mapping
 const iconMap: Record<string, LucideIcon> = {

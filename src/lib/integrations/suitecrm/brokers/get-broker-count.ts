@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 import { BrokerCount } from './types';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves count statistics for a specific broker from SuiteCRM.
@@ -14,6 +15,8 @@ import { BrokerCount } from './types';
  * @returns A Promise that resolves to a BrokerCount object containing various metrics on success, or null on failure
  */
 export async function getBrokerCount(session: string, brokerId: string): Promise<BrokerCount | null> {
+  logger.debug('Retrieving broker count statistics', { brokerId });
+  
   try {
     const restData = {
       session,
@@ -22,15 +25,22 @@ export async function getBrokerCount(session: string, brokerId: string): Promise
       }
     };
     
+    logger.trace('Making get_broker_count API request');
     const response = await axios.get(buildQueryURL('get_broker_count', restData));
     
     if (response.data && response.data.success && response.data.data) {
-      return response.data.data as BrokerCount;
+      const countData = response.data.data as BrokerCount;
+      logger.info('Broker count statistics retrieved successfully', { 
+        brokerId,
+        totalCount: countData.total_count
+      });
+      return countData;
     }
     
+    logger.warn('Broker count statistics retrieval unsuccessful', { brokerId });
     return null;
   } catch (error) {
-    console.error('Get broker count failed:', error);
+    logger.error('Broker count statistics retrieval failed', { brokerId, error });
     return null;
   }
 } 

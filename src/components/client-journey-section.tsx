@@ -14,7 +14,7 @@ const ClientJourneySection = ({ className = '' }: ClientJourneySectionProps) => 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry && entry.isIntersecting) {
           setIsVisible(true);
           observer.disconnect();
         }
@@ -92,10 +92,10 @@ const ClientJourneySection = ({ className = '' }: ClientJourneySectionProps) => 
       <div className="container mx-auto px-4 sm:px-8 md:px-16">
         {/* Section header */}
         <div className={`text-center mb-8 sm:mb-12 md:mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4 text-[var(--secondary)]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4 text-slate-800">
             Your Clear Path to Funding
           </h2>
-          <p className="text-base sm:text-lg max-w-3xl mx-auto text-[var(--foreground)]">
+          <p className="text-base sm:text-lg max-w-3xl mx-auto text-gray-800">
             Our structured approach ensures a seamless journey from initial consultation to 
             securing the funding your business needs to thrive.
           </p>
@@ -136,8 +136,8 @@ const ClientJourneySection = ({ className = '' }: ClientJourneySectionProps) => 
         <div className={`mt-10 sm:mt-16 text-center transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <a 
             href="/assessment" 
-            className="px-6 sm:px-8 py-3 sm:py-4 bg-[var(--primary)] text-white text-sm sm:text-base font-semibold inline-block 
-              hover:bg-[var(--primary-dark)] transition-colors rounded-md shadow-lg hover:shadow-xl"
+            className="px-6 sm:px-8 py-3 sm:py-4 bg-primary text-white text-sm sm:text-base font-semibold inline-block 
+              hover:bg-primary/90 transition-colors rounded-md shadow-lg hover:shadow-xl"
           >
             Start Your Journey Today
           </a>

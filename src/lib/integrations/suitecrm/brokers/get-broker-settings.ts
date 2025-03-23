@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves settings for a specific broker company from SuiteCRM.
@@ -13,6 +14,8 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to an object containing broker settings on success, or null on failure
  */
 export async function getBrokerSettings(session: string, companyId: string): Promise<Record<string, any> | null> {
+  logger.debug('Retrieving broker settings', { companyId });
+  
   try {
     const restData = {
       session,
@@ -21,15 +24,18 @@ export async function getBrokerSettings(session: string, companyId: string): Pro
       }
     };
     
+    logger.trace('Making get_broker_settings API request');
     const response = await axios.get(buildQueryURL('get_broker_settings', restData));
     
     if (response.data && response.data.success && response.data.settings) {
+      logger.info('Broker settings retrieved successfully', { companyId });
       return response.data.settings;
     }
     
+    logger.warn('Broker settings retrieval unsuccessful', { companyId });
     return null;
   } catch (error) {
-    console.error('Get broker settings failed:', error);
+    logger.error('Broker settings retrieval failed', { companyId, error });
     return null;
   }
 } 

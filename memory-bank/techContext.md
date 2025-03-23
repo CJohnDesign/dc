@@ -14,6 +14,11 @@
 - **Headings**: Merriweather (Google Fonts)
 - **Fonts Configuration**: Defined in `src/lib/fonts.ts` and applied via Tailwind
 
+## Color System
+- **Primary Color**: #6271EB (indigo/purple) defined in Tailwind config
+- **Secondary Colors**: Standard Tailwind palette (slate, gray, etc.)
+- **Direct Usage**: Colors applied via Tailwind classes rather than CSS variables
+
 ## Development Setup
 - Running the development server: `pnpm dev`
 - Fonts are loaded via Next.js Font optimization

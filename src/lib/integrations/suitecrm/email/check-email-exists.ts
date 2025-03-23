@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Checks if an email address already exists in a specified SuiteCRM module.
@@ -19,6 +20,8 @@ export async function checkEmailExists(
   moduleName: string, 
   email: string
 ): Promise<{ exists: boolean, recordId?: string }> {
+  logger.debug('Checking if email exists', { moduleName, email });
+  
   try {
     const restData = {
       session,
@@ -28,18 +31,32 @@ export async function checkEmailExists(
       }
     };
     
+    logger.trace('Making check_email_exist API request');
     const response = await axios.get(buildQueryURL('check_email_exist', restData));
     
     if (response.data) {
-      return {
+      const result = {
         exists: response.data.exists || false,
         recordId: response.data.record_id
       };
+      
+      if (result.exists) {
+        logger.info('Email exists in system', { 
+          email, 
+          moduleName, 
+          recordId: result.recordId 
+        });
+      } else {
+        logger.info('Email does not exist in system', { email, moduleName });
+      }
+      
+      return result;
     }
     
+    logger.warn('Email existence check returned invalid response', { email });
     return { exists: false };
   } catch (error) {
-    console.error('Check email exists failed:', error);
+    logger.error('Email existence check failed', { email, moduleName, error });
     return { exists: false };
   }
 } 

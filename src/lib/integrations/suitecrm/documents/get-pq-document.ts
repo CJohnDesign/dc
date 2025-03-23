@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 import { Document } from './types';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves a PQ (Pre-Qualification) document for a specific lead from the SuiteCRM system.
@@ -14,6 +15,8 @@ import { Document } from './types';
  * @returns A Promise that resolves to a Document object if successful, or null if the request fails
  */
 export async function getPQDocument(session: string, leadId: string): Promise<Document | null> {
+  logger.debug('Retrieving PQ document for lead', { leadId });
+  
   try {
     const restData = {
       session,
@@ -22,10 +25,11 @@ export async function getPQDocument(session: string, leadId: string): Promise<Do
       }
     };
     
+    logger.trace('Making get_pq_document API request');
     const response = await axios.post(buildQueryURL('get_pq_document', restData), {});
     
     if (response.data && response.data.success === "true") {
-      return {
+      const document = {
         document_name: response.data.document_name,
         document_revision_id: response.data.document_revision_id,
         template_type: response.data.template_type,
@@ -35,11 +39,20 @@ export async function getPQDocument(session: string, leadId: string): Promise<Do
         preview: response.data.preview,
         file_content: response.data.file_content
       };
+      
+      logger.info('PQ document retrieved successfully', { 
+        leadId, 
+        documentName: document.document_name,
+        fileType: document.file_mime_type
+      });
+      
+      return document;
     }
     
+    logger.warn('PQ document retrieval unsuccessful', { leadId });
     return null;
   } catch (error) {
-    console.error('Get PQ document failed:', error);
+    logger.error('PQ document retrieval failed', { leadId, error });
     return null;
   }
 } 

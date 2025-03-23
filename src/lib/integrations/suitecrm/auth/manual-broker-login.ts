@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 interface BrokerDetails {
   id: string;
@@ -25,6 +26,8 @@ export async function manualBrokerLogin(
   username: string, 
   password: string
 ): Promise<BrokerDetails | null> {
+  logger.debug('Attempting manual broker login', { username });
+  
   try {
     const restData = {
       session,
@@ -34,15 +37,18 @@ export async function manualBrokerLogin(
       }
     };
     
+    logger.trace('Making manual broker login API request');
     const response = await axios.get(buildQueryURL('manual_login', restData));
     
     if (response.data && response.data.id) {
+      logger.info('Manual broker login successful', { brokerId: response.data.id });
       return response.data as BrokerDetails;
     }
     
+    logger.warn('Manual broker login failed: Invalid credentials or broker not found');
     return null;
   } catch (error) {
-    console.error('Manual broker login failed:', error);
+    logger.error('Manual broker login request failed', error);
     return null;
   }
 } 

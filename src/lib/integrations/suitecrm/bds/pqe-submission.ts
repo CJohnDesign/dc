@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Submits Pre-Qualification Engine (PQE) data to the SuiteCRM API.
@@ -13,17 +14,28 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to true if submission was successful, false otherwise
  */
 export async function pqeSubmission(session: string, leadData: Record<string, any>): Promise<boolean> {
+  const leadId = leadData.id || leadData.lead_id || 'unknown';
+  logger.debug('Submitting PQE data', { leadId });
+  
   try {
     const restData = {
       session,
       params: leadData
     };
     
+    logger.trace('Making pqe_submission API request', { dataFields: Object.keys(leadData) });
     const response = await axios.get(buildQueryURL('pqe_submission', restData));
     
-    return response.data && response.data.success === true;
+    const isSuccessful = response.data && response.data.success === true;
+    if (isSuccessful) {
+      logger.info('PQE submission successful', { leadId });
+    } else {
+      logger.warn('PQE submission unsuccessful', { leadId });
+    }
+    
+    return isSuccessful;
   } catch (error) {
-    console.error('PQE submission failed:', error);
+    logger.error('PQE submission failed', { leadId, error });
     return false;
   }
 } 

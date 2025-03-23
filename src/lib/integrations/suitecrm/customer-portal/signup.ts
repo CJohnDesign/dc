@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Registers a new user in the SuiteCRM Customer Portal.
@@ -14,6 +15,8 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to the user's ID string on success, or null on failure
  */
 export async function customerPortalSignup(session: string, username: string, password: string): Promise<string | null> {
+  logger.debug('Initiating customer portal signup', { username });
+  
   try {
     const restData = {
       session,
@@ -23,15 +26,21 @@ export async function customerPortalSignup(session: string, username: string, pa
       }
     };
     
+    logger.trace('Making customer_protal_signup API request');
     const response = await axios.get(buildQueryURL('customer_protal_signup', restData));
     
     if (response.data && response.data.success && response.data.id) {
+      logger.info('Customer portal signup successful', { 
+        username, 
+        userId: response.data.id 
+      });
       return response.data.id;
     }
     
+    logger.warn('Customer portal signup unsuccessful', { username });
     return null;
   } catch (error) {
-    console.error('Customer portal signup failed:', error);
+    logger.error('Customer portal signup failed', { username, error });
     return null;
   }
 } 

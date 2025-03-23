@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Deletes a broker's logo from the SuiteCRM system.
@@ -13,6 +14,8 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to true if deletion was successful, false otherwise
  */
 export async function deleteBrokerLogo(session: string, id: string): Promise<boolean> {
+  logger.debug('Deleting broker logo', { id });
+  
   try {
     const restData = {
       session,
@@ -21,11 +24,19 @@ export async function deleteBrokerLogo(session: string, id: string): Promise<boo
       }
     };
     
+    logger.trace('Making delete_broker_logo API request');
     const response = await axios.get(buildQueryURL('delete_broker_logo', restData));
     
-    return response.data && response.data.success === true;
+    const isSuccessful = response.data && response.data.success === true;
+    if (isSuccessful) {
+      logger.info('Broker logo deleted successfully', { id });
+    } else {
+      logger.warn('Broker logo deletion unsuccessful', { id });
+    }
+    
+    return isSuccessful;
   } catch (error) {
-    console.error('Delete broker logo failed:', error);
+    logger.error('Broker logo deletion failed', { id, error });
     return false;
   }
 } 

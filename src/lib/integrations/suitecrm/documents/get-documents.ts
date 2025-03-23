@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves documents associated with a specific lead from the SuiteCRM system.
@@ -14,6 +15,8 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to a Record of document information if successful, or null otherwise
  */
 export async function getDocuments(session: string, module: string, leadId: string): Promise<Record<string, string> | null> {
+  logger.debug('Retrieving documents for lead', { module, leadId });
+  
   try {
     const restData = {
       session,
@@ -23,15 +26,25 @@ export async function getDocuments(session: string, module: string, leadId: stri
       }
     };
     
+    logger.trace('Making get_documents API request');
     const response = await axios.get(buildQueryURL('get_documents', restData));
     
     if (response.data && response.data.success && response.data.documantsAvailable) {
-      return response.data.documents;
+      const documents = response.data.documents;
+      const documentCount = documents ? Object.keys(documents).length : 0;
+      
+      logger.info('Documents retrieved successfully', { 
+        leadId, 
+        documentCount
+      });
+      
+      return documents;
     }
     
+    logger.warn('No documents available or retrieval unsuccessful', { leadId, module });
     return null;
   } catch (error) {
-    console.error('Get documents failed:', error);
+    logger.error('Document retrieval failed', { leadId, module, error });
     return null;
   }
 } 

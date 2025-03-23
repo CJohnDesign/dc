@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Checks if an email address is a duplicate in a specified SuiteCRM module.
@@ -21,6 +22,12 @@ export async function isDuplicateEmail(
   module: string, 
   field?: string
 ): Promise<boolean> {
+  logger.debug('Checking if email is a duplicate', { 
+    email, 
+    module,
+    field: field || 'default'
+  });
+  
   try {
     const data = {
       session,
@@ -31,11 +38,19 @@ export async function isDuplicateEmail(
       }
     };
     
+    logger.trace('Making is_duplicate_email API request');
     const response = await axios.post(buildQueryURL('is_duplicate_email', {}), data);
     
-    return response.data && response.data.success === true;
+    const isDuplicate = response.data && response.data.success === true;
+    if (isDuplicate) {
+      logger.info('Email is a duplicate', { email, module });
+    } else {
+      logger.info('Email is not a duplicate', { email, module });
+    }
+    
+    return isDuplicate;
   } catch (error) {
-    console.error('Is duplicate email failed:', error);
+    logger.error('Duplicate email check failed', { email, module, error });
     return false;
   }
 } 

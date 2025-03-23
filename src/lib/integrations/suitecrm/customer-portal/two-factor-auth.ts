@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Verifies a two-factor authentication code for a user in the SuiteCRM Customer Portal.
@@ -23,6 +24,12 @@ export async function customerPortalTwofa(
   twofaCode: string,
   rememberMe?: string
 ): Promise<{ success: boolean, twoFactorId?: string }> {
+  logger.debug('Verifying two-factor authentication code', { 
+    moduleName, 
+    leadId, 
+    hasRememberMe: !!rememberMe 
+  });
+  
   try {
     const restData = {
       session,
@@ -34,18 +41,21 @@ export async function customerPortalTwofa(
       }
     };
     
+    logger.trace('Making customer_portal_twofa API request');
     const response = await axios.post(buildQueryURL('customer_portal_twofa', restData), {});
     
     if (response.data && response.data.success) {
+      logger.info('Two-factor authentication successful', { leadId });
       return {
         success: true,
         twoFactorId: response.data.two_factor_id
       };
     }
     
+    logger.warn('Two-factor authentication failed: Invalid code', { leadId });
     return { success: false };
   } catch (error) {
-    console.error('Customer portal twofa failed:', error);
+    logger.error('Two-factor authentication request failed', { leadId, error });
     return { success: false };
   }
 } 

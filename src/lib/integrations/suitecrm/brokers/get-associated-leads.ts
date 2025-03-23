@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 import { Lead } from '../leads/types';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves leads associated with a specific broker.
@@ -14,6 +15,8 @@ import { Lead } from '../leads/types';
  * @returns A Promise that resolves to an array of Lead objects on success, or an empty array on failure
  */
 export async function getAssociatedLeads(session: string, brokerId: string): Promise<Lead[]> {
+  logger.debug('Retrieving leads associated with broker', { brokerId });
+  
   try {
     const restData = {
       session,
@@ -22,15 +25,22 @@ export async function getAssociatedLeads(session: string, brokerId: string): Pro
       }
     };
     
+    logger.trace('Making get_associated_leads API request');
     const response = await axios.get(buildQueryURL('get_associated_leads', restData));
     
     if (response.data && response.data.success && Array.isArray(response.data.data)) {
-      return response.data.data;
+      const leads = response.data.data;
+      logger.info('Associated leads retrieved successfully', { 
+        brokerId, 
+        leadCount: leads.length 
+      });
+      return leads;
     }
     
+    logger.warn('Associated leads retrieval unsuccessful or no leads found', { brokerId });
     return [];
   } catch (error) {
-    console.error('Get associated leads failed:', error);
+    logger.error('Associated leads retrieval failed', { brokerId, error });
     return [];
   }
 } 

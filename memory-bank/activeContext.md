@@ -2,7 +2,8 @@
 
 ## Current Focus
 - Working on dashboard interface components and overall user experience
-- Implementing consistent typography using new font configuration
+- Implementing consistent styling with standardized color usage
+- Replacing CSS variables with direct Tailwind classes for better maintainability
 - Preparing for authentication flow integration with dashboard components
 
 ## Recent Changes
@@ -11,6 +12,11 @@
   - Added Merriweather for headings with appropriate styling
   - Fixed font variable application in layout.tsx
   - Configured proper CSS rules to apply heading fonts consistently
+- Standardized color system:
+  - Replaced CSS variables with direct Tailwind classes
+  - Set primary color to #6271EB in Tailwind config
+  - Updated components to use primary color consistently
+  - Fixed visibility issues with text on colored backgrounds
 
 ## Next Steps
 - Scaffold dashboard components using ShadCN UI library
@@ -19,7 +25,8 @@
 - Connect frontend to CRM via Swagger API
 
 ## Active Decisions
-- Using CSS variables for font management
+- Using Tailwind's color system instead of CSS variables for better maintainability
+- Consistent use of primary color (#6271EB) throughout the application
 - Applying a consistent typographic hierarchy with distinct heading styles
 - Maintaining mobile-first responsive design approach
 - Prioritizing performance through minimal client-side JavaScript 

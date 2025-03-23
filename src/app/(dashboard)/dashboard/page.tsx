@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import CreditActionCard from './components/CreditActionCard';
-import CreditSummaryPanel from './components/CreditSummaryPanel';
-import AccountsTable from './components/AccountsTable';
-import ProgramOfferCards from './components/ProgramOfferCards';
+import CreditActionCard from './components/credit-action-card';
+import CreditSummaryPanel from './components/credit-summary-panel';
+import AccountsTable from './components/accounts-table';
+import ProgramOfferCards from './components/program-offer-cards';
 import { getCreditActionItems, getCreditSummary, getAccounts } from './utils/dataProvider';
 
 export default function FundDashboardPage() {

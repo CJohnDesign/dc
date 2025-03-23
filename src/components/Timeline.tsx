@@ -24,7 +24,7 @@ const Timeline = ({ steps, className = '' }: TimelineProps) => {
         {/* Progress bar */}
         <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2 z-0">
           <div 
-            className="h-full bg-[var(--primary)] transition-all duration-500 ease-in-out" 
+            className="h-full bg-primary transition-all duration-500 ease-in-out" 
             style={{ width: `${(activeStep - 1) / (steps.length - 1) * 100}%` }}
           />
         </div>
@@ -38,7 +38,7 @@ const Timeline = ({ steps, className = '' }: TimelineProps) => {
               w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center z-10
               transition-all duration-300 ease-in-out
               ${activeStep >= step.id 
-                ? 'bg-[var(--primary)] text-white' 
+                ? 'bg-primary text-white font-semibold' 
                 : 'bg-white border-2 border-gray-300 text-gray-500'}
             `}
           >
@@ -58,12 +58,12 @@ const Timeline = ({ steps, className = '' }: TimelineProps) => {
         >
           <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-start">
-              <div className="mb-3 sm:mb-0 sm:mr-4 text-[var(--primary)] flex justify-center">
+              <div className="mb-3 sm:mb-0 sm:mr-4 text-primary flex justify-center">
                 {step.icon}
               </div>
               <div>
-                <h3 className="text-lg sm:text-xl font-bold mb-2 text-[var(--secondary)] text-center sm:text-left">{step.title}</h3>
-                <p className="text-sm sm:text-base text-[var(--foreground)]">{step.description}</p>
+                <h3 className="text-lg sm:text-xl font-bold mb-2 text-slate-800 text-center sm:text-left">{step.title}</h3>
+                <p className="text-sm sm:text-base text-gray-800">{step.description}</p>
               </div>
             </div>
           </div>
@@ -79,7 +79,7 @@ const Timeline = ({ steps, className = '' }: TimelineProps) => {
         >
           Previous
         </button>
-        <span className="text-sm text-[var(--foreground)]">
+        <span className="text-sm text-gray-800">
           Step {activeStep} of {steps.length}
         </span>
         <button 

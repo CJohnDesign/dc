@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 interface Lead {
   id: string;
@@ -26,6 +27,8 @@ export async function manualLeadLogin(
   username: string, 
   password: string
 ): Promise<Lead | null> {
+  logger.debug('Attempting manual lead login', { username });
+  
   try {
     const restData = {
       session,
@@ -35,15 +38,18 @@ export async function manualLeadLogin(
       }
     };
     
+    logger.trace('Making manual lead login API request');
     const response = await axios.get(buildQueryURL('manual_lead_login', restData));
     
     if (response.data && response.data.id) {
+      logger.info('Manual lead login successful', { leadId: response.data.id });
       return response.data as Lead;
     }
     
+    logger.warn('Manual lead login failed: Invalid credentials or lead not found');
     return null;
   } catch (error) {
-    console.error('Manual lead login failed:', error);
+    logger.error('Manual lead login request failed', error);
     return null;
   }
 } 

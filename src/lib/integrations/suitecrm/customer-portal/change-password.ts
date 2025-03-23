@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Initiates a password change request for a user in the SuiteCRM Customer Portal.
@@ -14,6 +15,8 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to true if the password change request was successful, false otherwise
  */
 export async function changePasswordCustomerPortal(session: string, moduleName: string, username: string): Promise<boolean> {
+  logger.debug('Initiating customer portal password change', { moduleName, username });
+  
   try {
     const restData = {
       session,
@@ -23,11 +26,19 @@ export async function changePasswordCustomerPortal(session: string, moduleName: 
       }
     };
     
+    logger.trace('Making change_password_customer_portal API request');
     const response = await axios.get(buildQueryURL('change_password_customer_portal', restData));
     
-    return response.data && response.data.success === true;
+    const isSuccessful = response.data && response.data.success === true;
+    if (isSuccessful) {
+      logger.info('Password change request initiated successfully', { username });
+    } else {
+      logger.warn('Password change request unsuccessful', { username });
+    }
+    
+    return isSuccessful;
   } catch (error) {
-    console.error('Change password customer portal failed:', error);
+    logger.error('Password change request failed', { username, error });
     return false;
   }
 } 

@@ -2,9 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import DashboardLayout from '../DashboardLayout';
 import { CreditCard, Store, User, LucideIcon, ArrowRight } from 'lucide-react';
-import programsData from '../data/programs.json';
+import programsData from '@/lib/db/examples/example-programs.json';
 
 // Define a mapping of icon names to actual Lucide icons
 const iconMap: Record<string, LucideIcon> = {
@@ -95,7 +94,6 @@ export default function ProgramsPage() {
   const programs = programsData as Program[];
 
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         {/* Page Title */}
         <div className="flex items-center justify-between mb-6">
@@ -109,6 +107,5 @@ export default function ProgramsPage() {
           ))}
         </div>
       </div>
-    </DashboardLayout>
   );
 } 

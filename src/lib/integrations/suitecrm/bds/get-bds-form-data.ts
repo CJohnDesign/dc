@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves BDS form data for a specific lead.
@@ -17,6 +18,11 @@ export async function getBDSFormData(
   leadId: string, 
   requestedFields: Record<string, string>
 ): Promise<Record<string, any> | null> {
+  logger.debug('Retrieving BDS form data', { 
+    leadId, 
+    fieldCount: Object.keys(requestedFields).length 
+  });
+  
   try {
     const restData = {
       session,
@@ -26,15 +32,21 @@ export async function getBDSFormData(
       }
     };
     
+    logger.trace('Making get_bds_form_data API request', { 
+      leadId, 
+      fields: Object.keys(requestedFields) 
+    });
     const response = await axios.get(buildQueryURL('get_bds_form_data', restData));
     
     if (response.data && response.data.success) {
+      logger.info('BDS form data retrieved successfully', { leadId });
       return response.data;
     }
     
+    logger.warn('BDS form data retrieval unsuccessful', { leadId });
     return null;
   } catch (error) {
-    console.error('Get BDS form data failed:', error);
+    logger.error('BDS form data retrieval failed', { leadId, error });
     return null;
   }
 } 

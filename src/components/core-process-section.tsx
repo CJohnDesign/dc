@@ -99,15 +99,15 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
   return (
     <section 
       ref={sectionRef}
-      className={`py-12 sm:py-16 md:py-20 bg-[var(--background-alt)] ${className} overflow-hidden`}
+      className={`py-12 sm:py-16 md:py-20 bg-gray-50 ${className} overflow-hidden`}
     >
       <div className="container mx-auto px-4 sm:px-8 md:px-16 max-w-full">
         {/* Section header */}
         <div className={`text-center mb-8 sm:mb-12 md:mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4 text-[var(--secondary)]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4 text-slate-800">
             The Three Pillars of Financial Credibility
           </h2>
-          <p className="text-base sm:text-lg max-w-3xl mx-auto text-[var(--foreground)]">
+          <p className="text-base sm:text-lg max-w-3xl mx-auto text-gray-800">
             Our proprietary approach combines deep industry knowledge with strategic optimization 
             to position your business for funding success.
           </p>
@@ -123,8 +123,8 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
                 className={`
                   whitespace-nowrap px-3 sm:px-6 py-2 sm:py-3 rounded-full transition-all duration-300 text-sm sm:text-base
                   ${activeTab === index 
-                    ? 'bg-[var(--primary)] text-white shadow-md' 
-                    : 'text-[var(--foreground)] hover:bg-gray-100'}
+                    ? 'bg-primary text-white font-semibold shadow-md' 
+                    : 'text-gray-800 hover:bg-gray-100'}
                 `}
               >
                 <span className="font-medium">{pillar.title}</span>
@@ -149,16 +149,16 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
             >
               {/* Left column - Content */}
               <div className="bg-white p-4 sm:p-6 md:p-8 rounded-lg shadow-lg">
-                <div className="text-[var(--primary)] mb-3 md:mb-4">
+                <div className="text-primary mb-3 md:mb-4">
                   {pillar.icon}
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold mb-1 md:mb-2 text-[var(--secondary)]">
+                <h3 className="text-xl sm:text-2xl font-bold mb-1 md:mb-2 text-slate-800">
                   {pillar.title}
                 </h3>
-                <h4 className="text-base sm:text-lg font-medium mb-3 md:mb-4 text-[var(--primary)]">
+                <h4 className="text-base sm:text-lg font-medium mb-3 md:mb-4 text-primary">
                   {pillar.subtitle}
                 </h4>
-                <p className="text-sm sm:text-base text-[var(--foreground)] mb-4 md:mb-6">
+                <p className="text-sm sm:text-base text-gray-800 mb-4 md:mb-6">
                   {pillar.description}
                 </p>
                 
@@ -166,10 +166,10 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
                 <ul className="space-y-2 sm:space-y-3">
                   {pillar.benefits.map((benefit, index) => (
                     <li key={index} className="flex items-start">
-                      <svg className="h-5 w-5 text-[var(--secondary)] mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="h-5 w-5 text-slate-800 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span className="text-sm sm:text-base text-[var(--foreground)]">
+                      <span className="text-sm sm:text-base text-gray-800">
                         {benefit}
                       </span>
                     </li>
@@ -179,7 +179,7 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
               
               {/* Right column - Image */}
               <div className="relative h-[250px] sm:h-[300px] md:h-[400px] rounded-lg overflow-hidden shadow-xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-[rgba(34,63,71,0.7)] to-transparent z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-800/70 to-transparent z-10"></div>
                 <div 
                   className="absolute inset-0 bg-cover bg-center"
                   style={{ backgroundImage: `url(${pillar.image})` }}
@@ -197,7 +197,7 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
               onClick={() => setActiveTab(index)}
               className={`
                 w-2 h-2 sm:w-3 sm:h-3 rounded-full mx-1 sm:mx-2 transition-all duration-300
-                ${activeTab === index ? 'bg-[var(--primary)] scale-125' : 'bg-gray-300 hover:bg-gray-400'}
+                ${activeTab === index ? 'bg-primary scale-125' : 'bg-gray-300 hover:bg-gray-400'}
               `}
               aria-label={`View ${pillar.title}`}
             />

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Sets a new password for a user in the SuiteCRM Customer Portal.
@@ -21,6 +22,8 @@ export async function setPasswordCustomerPortal(
   leadId: string, 
   password: string
 ): Promise<boolean> {
+  logger.debug('Setting new password for customer portal user', { moduleName, leadId });
+  
   try {
     const restData = {
       session,
@@ -31,11 +34,19 @@ export async function setPasswordCustomerPortal(
       }
     };
     
+    logger.trace('Making set_password_customer_portal API request');
     const response = await axios.post(buildQueryURL('set_password_customer_portal', restData), {});
     
-    return response.data && response.data.success === true;
+    const isSuccessful = response.data && response.data.success === true;
+    if (isSuccessful) {
+      logger.info('Password set successfully for customer portal user', { leadId });
+    } else {
+      logger.warn('Setting password for customer portal user unsuccessful', { leadId });
+    }
+    
+    return isSuccessful;
   } catch (error) {
-    console.error('Set password customer portal failed:', error);
+    logger.error('Setting password for customer portal user failed', { leadId, error });
     return false;
   }
 } 

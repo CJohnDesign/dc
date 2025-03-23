@@ -1,6 +1,6 @@
-import { CreditActionItem } from '../components/CreditActionCard';
-import { CreditSummary } from '../components/CreditSummaryPanel';
-import { Account } from '../components/AccountsTable';
+import { CreditActionItem } from '../components/credit-action-card';
+import { CreditSummary } from '../components/credit-summary-panel';
+import { Account } from '../components/accounts-table';
 
 // Sample data for Debbie Smith based on the JSON file
 const debbieSmithData = {

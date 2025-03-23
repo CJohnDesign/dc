@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Requests a new two-factor authentication code for a user in the SuiteCRM Customer Portal.
@@ -15,6 +16,8 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to true if the request was successful, false otherwise
  */
 export async function requestTwoFactorAgain(session: string, moduleName: string, leadId: string): Promise<boolean> {
+  logger.debug('Requesting new two-factor authentication code', { moduleName, leadId });
+  
   try {
     const restData = {
       session,
@@ -24,11 +27,19 @@ export async function requestTwoFactorAgain(session: string, moduleName: string,
       }
     };
     
+    logger.trace('Making request_two_factor_again API request');
     const response = await axios.post(buildQueryURL('request_two_factor_again', restData), {});
     
-    return response.data && response.data.success === true;
+    const isSuccessful = response.data && response.data.success === true;
+    if (isSuccessful) {
+      logger.info('New two-factor code request successful', { leadId });
+    } else {
+      logger.warn('New two-factor code request unsuccessful', { leadId });
+    }
+    
+    return isSuccessful;
   } catch (error) {
-    console.error('Request two factor again failed:', error);
+    logger.error('New two-factor code request failed', { leadId, error });
     return false;
   }
 } 

@@ -6,8 +6,12 @@
 - Font configuration updated with Rethink Sans for body and Merriweather for headings
 - Integration methods organized in the integrations folder
 - Drizzle tables set up for potential database integration
+- Consistent color system using Tailwind's primary color (#6271EB)
+- Fixed visibility issues with text on colored backgrounds
+- Standardized component styling with direct Tailwind classes
 
 ## Current Status
+- Color standardization completed on March 24, 2024
 - Font update completed on March 23, 2024
 - Development environment working correctly with pnpm
 - Preparing to work on dashboard components following the mockups

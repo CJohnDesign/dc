@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Checks if a mobile phone number already exists in a specified SuiteCRM module.
@@ -19,6 +20,11 @@ export async function checkPhoneExists(
   phoneMobile: string, 
   moduleName: string
 ): Promise<boolean> {
+  logger.debug('Checking if phone number exists', { 
+    phoneMobile: phoneMobile.slice(-4), // Log only last 4 digits for privacy
+    moduleName 
+  });
+  
   try {
     const restData = {
       session,
@@ -28,15 +34,33 @@ export async function checkPhoneExists(
       }
     };
     
+    logger.trace('Making check_phone_exist API request');
     const response = await axios.get(buildQueryURL('check_phone_exist', restData));
     
     if (response.data) {
-      return response.data.exists === true;
+      const exists = response.data.exists === true;
+      if (exists) {
+        logger.info('Phone number exists in system', { 
+          phoneLastDigits: phoneMobile.slice(-4),
+          moduleName 
+        });
+      } else {
+        logger.info('Phone number does not exist in system', { 
+          phoneLastDigits: phoneMobile.slice(-4),
+          moduleName 
+        });
+      }
+      return exists;
     }
     
+    logger.warn('Phone existence check returned invalid response');
     return false;
   } catch (error) {
-    console.error('Check phone exists failed:', error);
+    logger.error('Phone existence check failed', { 
+      phoneLastDigits: phoneMobile.slice(-4),
+      moduleName,
+      error 
+    });
     return false;
   }
 } 

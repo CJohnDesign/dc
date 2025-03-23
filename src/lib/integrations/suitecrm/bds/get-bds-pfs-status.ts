@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves the BDS PFS (Personal Financial Statement) status for a specific lead.
@@ -13,6 +14,8 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to true if the PFS form is complete, false otherwise
  */
 export async function getBDSPFSStatus(session: string, leadId: string): Promise<boolean> {
+  logger.debug('Checking BDS PFS status', { leadId });
+  
   try {
     const restData = {
       session,
@@ -21,15 +24,22 @@ export async function getBDSPFSStatus(session: string, leadId: string): Promise<
       }
     };
     
+    logger.trace('Making get_bds_pfs_status API request');
     const response = await axios.get(buildQueryURL('get_bds_pfs_status', restData));
     
     if (response.data && response.data.success) {
-      return response.data.bds_pfs_form_status === true;
+      const isComplete = response.data.bds_pfs_form_status === true;
+      logger.info('BDS PFS status check complete', { 
+        leadId, 
+        isComplete 
+      });
+      return isComplete;
     }
     
+    logger.warn('BDS PFS status check returned unsuccessful response', { leadId });
     return false;
   } catch (error) {
-    console.error('Get BDS PFS status failed:', error);
+    logger.error('BDS PFS status check failed', { leadId, error });
     return false;
   }
 } 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Submits BDS PFS (Personal Financial Statement) form data to the SuiteCRM API.
@@ -20,6 +21,12 @@ export async function submitBDSPFSFormData(
   id: string, 
   fieldToCheck: string
 ): Promise<boolean> {
+  logger.debug('Submitting BDS PFS form data', { 
+    module, 
+    id, 
+    fieldToCheck 
+  });
+  
   try {
     const restData = {
       session,
@@ -30,11 +37,19 @@ export async function submitBDSPFSFormData(
       }
     };
     
+    logger.trace('Making submit_bds_pfs_form_data API request');
     const response = await axios.get(buildQueryURL('submit_bds_pfs_form_data', restData));
     
-    return response.data && response.data.success === true;
+    const isSuccessful = response.data && response.data.success === true;
+    if (isSuccessful) {
+      logger.info('BDS PFS form data submitted successfully', { module, id });
+    } else {
+      logger.warn('BDS PFS form data submission unsuccessful', { module, id });
+    }
+    
+    return isSuccessful;
   } catch (error) {
-    console.error('Submit BDS PFS form data failed:', error);
+    logger.error('BDS PFS form data submission failed', { module, id, error });
     return false;
   }
 } 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Sends broker-related emails through the SuiteCRM system.
@@ -15,6 +16,8 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to true if the emails were successfully sent, false otherwise
  */
 export async function sendBrokerMails(session: string, contactId: string, companyId: string): Promise<boolean> {
+  logger.debug('Sending broker emails', { contactId, companyId });
+  
   try {
     const data = {
       session,
@@ -24,11 +27,19 @@ export async function sendBrokerMails(session: string, contactId: string, compan
       }
     };
     
+    logger.trace('Making send_broker_mails API request');
     const response = await axios.post(buildQueryURL('send_broker_mails', {}), data);
     
-    return response.data && response.data.success === true;
+    const isSuccessful = response.data && response.data.success === true;
+    if (isSuccessful) {
+      logger.info('Broker emails sent successfully', { contactId, companyId });
+    } else {
+      logger.warn('Broker emails sending unsuccessful', { contactId, companyId });
+    }
+    
+    return isSuccessful;
   } catch (error) {
-    console.error('Send broker mails failed:', error);
+    logger.error('Broker emails sending failed', { contactId, companyId, error });
     return false;
   }
 } 

@@ -7,6 +7,7 @@
 
 ## Key Technical Decisions
 - **Font Strategy**: Using Google Fonts (Rethink Sans for body, Merriweather for headings) for consistent typography
+- **Color System**: Primary color (#6271EB) defined in Tailwind config with direct class usage
 - **Component Organization**: UI components in `src/components/ui`, page-specific components in `src/components`
 - **Authentication Flow**: Custom middleware for authentication using SuiteCRM
 - **API Integration**: Structured integration methods in the `integrations` folder
@@ -16,6 +17,7 @@
 - **Component Composition**: Building complex UI from smaller, reusable components
 - **Server/Client Split**: Minimizing client-side JavaScript for better performance
 - **TypeScript Interfaces**: Used for type safety throughout the application
+- **Color Consistency**: Direct Tailwind classes for all color applications
 
 ## Component Relationships
 - **Layout Hierarchy**: Global layout → Dashboard layout → Page content

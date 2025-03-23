@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Authenticates a user in the SuiteCRM Customer Portal.
@@ -21,6 +22,11 @@ export async function customerPortalLogin(
   password: string, 
   twoFactorAuthId?: string
 ): Promise<{ id: string, twoFaCheck: boolean } | null> {
+  logger.debug('Attempting customer portal login', { 
+    username, 
+    hasTwoFactorAuthId: !!twoFactorAuthId 
+  });
+  
   try {
     const restData = {
       session,
@@ -31,18 +37,28 @@ export async function customerPortalLogin(
       }
     };
     
+    logger.trace('Making customer_portal_login API request');
     const response = await axios.get(buildQueryURL('customer_portal_login', restData));
     
     if (response.data && response.data.success && response.data.id) {
-      return {
+      const result = {
         id: response.data.id,
         twoFaCheck: response.data.two_fa_check === true
       };
+      
+      logger.info('Customer portal login successful', { 
+        username, 
+        userId: result.id,
+        requiresTwoFactor: result.twoFaCheck
+      });
+      
+      return result;
     }
     
+    logger.warn('Customer portal login unsuccessful', { username });
     return null;
   } catch (error) {
-    console.error('Customer portal login failed:', error);
+    logger.error('Customer portal login failed', { username, error });
     return null;
   }
 } 

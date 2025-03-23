@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Interface representing the response from a successful SuiteCRM login request.
@@ -21,6 +22,8 @@ interface LoginResponse {
  * @throws Error if authentication fails or if the API response is invalid
  */
 export async function login(username: string, password: string): Promise<string> {
+  logger.debug('Attempting SuiteCRM login', { username });
+  
   try {
     const restData = {
       user_auth: {
@@ -31,15 +34,18 @@ export async function login(username: string, password: string): Promise<string>
       application: "Autobot"
     };
     
+    logger.trace('Making SuiteCRM login request');
     const response = await axios.get<LoginResponse>(buildQueryURL('login', restData));
     
     if (response.data && response.data.id) {
+      logger.info('SuiteCRM login successful');
       return response.data.id;
     } else {
+      logger.error('SuiteCRM login failed: Invalid response structure');
       throw new Error('Login failed: Invalid response');
     }
   } catch (error) {
-    console.error('Login failed:', error);
+    logger.error('SuiteCRM login failed', error);
     throw error;
   }
 }

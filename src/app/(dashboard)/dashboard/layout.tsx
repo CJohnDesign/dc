@@ -5,12 +5,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { 
-  Users, 
+  Home, 
   Menu,
-  LayoutDashboard,
   CreditCard,
-  LineChart,
-  FileText
+  Lightbulb,
+  User
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -20,13 +19,13 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const navItems = [
-    { icon: LayoutDashboard, label: 'Overview', href: '/fund/dashboard' },
-    { icon: CreditCard, label: 'Programs', href: '/fund/dashboard/programs' },
-    { icon: LineChart, label: 'Analytics', href: '/fund/dashboard/analytics' },
-    { icon: Users, label: 'Investors', href: '/fund/dashboard/investors' },
-    { icon: FileText, label: 'Documents', href: '/fund/dashboard/documents' },
+    { icon: Home, label: 'Home', href: '/dashboard' },
+    { icon: CreditCard, label: 'Credit', href: '/credit' },
+    { icon: Lightbulb, label: 'Solutions', href: '/solutions' },
+    { icon: User, label: 'General', href: '/general' },
+    { icon: CreditCard, label: 'Programs', href: '/programs' },
+    { icon: CreditCard, label: 'Security', href: '/security' },
   ];
 
   return (
@@ -34,7 +33,7 @@ export default function DashboardLayout({
       {/* Mobile header */}
       <div className="lg:hidden flex items-center justify-between bg-white border-b border-gray-200 p-4">
         <div className="flex items-center">
-          <span className="font-medium">Fund Dashboard</span>
+          <span className="font-medium">Dashboard</span>
         </div>
         <Button
           className="-mr-3"
