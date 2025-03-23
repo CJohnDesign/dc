@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves a file from the SuiteCRM system using the provided session and record ID.
@@ -14,21 +15,26 @@ import { buildQueryURL } from '../utils/api-helpers';
  *          cannot be retrieved or doesn't exist
  */
 export async function getFile(session: string, recordId: string): Promise<any | null> {
+  logger.debug('Retrieving file', { recordId });
+  
   try {
     const restData = {
       session,
       recordId
     };
     
+    logger.trace('Making get_file API request', { recordId });
     const response = await axios.get(buildQueryURL('get_file', restData));
     
     if (response.data && response.data.success && response.data.file) {
+      logger.info('File retrieved successfully', { recordId });
       return response.data.file;
     }
     
+    logger.warn('File retrieval unsuccessful or file not found', { recordId });
     return null;
   } catch (error) {
-    console.error('Get file failed:', error);
+    logger.error('File retrieval failed', { recordId, error });
     return null;
   }
 } 

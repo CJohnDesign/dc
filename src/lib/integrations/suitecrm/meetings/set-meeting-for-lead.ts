@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Creates a meeting associated with a lead in the SuiteCRM system.
@@ -26,6 +27,15 @@ export async function setMeetingForLead(
   endTime: string,
   description: string
 ): Promise<boolean> {
+  logger.debug('Scheduling meeting for lead', { 
+    event,
+    email,
+    name,
+    startTime,
+    endTime,
+    hasDescription: !!description
+  });
+  
   try {
     const restData = {
       session,
@@ -47,11 +57,26 @@ export async function setMeetingForLead(
       }
     };
     
+    logger.trace('Making set_metting_for_lead API request', { email, event });
     const response = await axios.post(buildQueryURL('set_metting_for_lead', restData), {});
     
-    return response.data === true;
+    if (response.data === true) {
+      logger.info('Meeting scheduled successfully', { 
+        email, 
+        event,
+        startTime 
+      });
+      return true;
+    }
+    
+    logger.warn('Meeting scheduling unsuccessful', { email, event });
+    return false;
   } catch (error) {
-    console.error('Set meeting for lead failed:', error);
+    logger.error('Meeting scheduling failed', { 
+      email, 
+      event,
+      error
+    });
     return false;
   }
 } 

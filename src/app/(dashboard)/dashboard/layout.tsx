@@ -21,11 +21,11 @@ export default function DashboardLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navItems = [
     { icon: Home, label: 'Home', href: '/dashboard' },
-    { icon: CreditCard, label: 'Credit', href: '/credit' },
-    { icon: Lightbulb, label: 'Solutions', href: '/solutions' },
-    { icon: User, label: 'General', href: '/general' },
-    { icon: CreditCard, label: 'Programs', href: '/programs' },
-    { icon: CreditCard, label: 'Security', href: '/security' },
+    { icon: CreditCard, label: 'Credit', href: '/dashboard/credit' },
+    { icon: Lightbulb, label: 'Solutions', href: '/dashboard/solutions' },
+    { icon: User, label: 'General', href: '/dashboard/general' },
+    { icon: CreditCard, label: 'Programs', href: '/dashboard/programs' },
+    { icon: CreditCard, label: 'Security', href: '/dashboard/security' },
   ];
 
   return (

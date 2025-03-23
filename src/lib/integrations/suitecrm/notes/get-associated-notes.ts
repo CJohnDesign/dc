@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves notes associated with a specific query from the SuiteCRM API.
@@ -14,6 +15,13 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to an array of note objects
  */
 export async function getAssociatedNotes(session: string, query: string = "", limit: string = ""): Promise<any[]> {
+  logger.debug('Retrieving associated notes', { 
+    hasQuery: !!query,
+    queryLength: query.length,
+    hasLimit: !!limit,
+    limit
+  });
+  
   try {
     const restData = {
       session,
@@ -23,15 +31,21 @@ export async function getAssociatedNotes(session: string, query: string = "", li
       }
     };
     
+    logger.trace('Making get_associated_notes API request', { query });
     const response = await axios.get(buildQueryURL('get_associated_notes', restData));
     
     if (response.data && response.data.success && Array.isArray(response.data.data)) {
+      logger.info('Notes retrieved successfully', { 
+        count: response.data.data.length,
+        query
+      });
       return response.data.data;
     }
     
+    logger.warn('Notes retrieval unsuccessful or invalid response format', { query });
     return [];
   } catch (error) {
-    console.error('Get associated notes failed:', error);
+    logger.error('Notes retrieval failed', { query, error });
     return [];
   }
 } 

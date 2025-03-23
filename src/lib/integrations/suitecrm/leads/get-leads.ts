@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 import { Lead } from './types';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves multiple lead records from the SuiteCRM system.
@@ -18,6 +19,12 @@ import { Lead } from './types';
  *          if the leads cannot be retrieved or don't exist
  */
 export async function getLeads(session: string, leadIds: string[], selectFields: string[] = []): Promise<Lead[]> {
+  logger.debug('Retrieving multiple leads', { 
+    leadCount: leadIds.length,
+    fieldCount: selectFields.length,
+    selectSpecificFields: selectFields.length > 0
+  });
+  
   try {
     const restData = {
       session,
@@ -26,15 +33,24 @@ export async function getLeads(session: string, leadIds: string[], selectFields:
       select_fields: selectFields
     };
     
+    logger.trace('Making get_entries API request', { leadIdCount: leadIds.length });
     const response = await axios.get(buildQueryURL('get_entries', restData));
     
     if (Array.isArray(response.data)) {
+      logger.info('Leads retrieved successfully', { 
+        requestedCount: leadIds.length,
+        retrievedCount: response.data.length
+      });
       return response.data;
     }
     
+    logger.warn('Leads retrieval unsuccessful or invalid response format');
     return [];
   } catch (error) {
-    console.error('Get leads failed:', error);
+    logger.error('Leads retrieval failed', { 
+      leadCount: leadIds.length,
+      error
+    });
     return [];
   }
 } 

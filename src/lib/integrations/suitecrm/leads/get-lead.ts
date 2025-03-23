@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 import { Lead } from './types';
+import logger from '@/utils/logger';
 
 /**
  * Retrieves a lead record from the SuiteCRM system.
@@ -18,6 +19,12 @@ import { Lead } from './types';
  *          cannot be retrieved or doesn't exist
  */
 export async function getLead(session: string, leadId: string, selectFields: string[] = []): Promise<Lead | null> {
+  logger.debug('Retrieving lead', { 
+    leadId, 
+    fieldCount: selectFields.length,
+    selectSpecificFields: selectFields.length > 0
+  });
+  
   try {
     const restData = {
       session,
@@ -30,15 +37,21 @@ export async function getLead(session: string, leadId: string, selectFields: str
       deleted: "false"
     };
     
+    logger.trace('Making get_entry API request for lead', { leadId });
     const response = await axios.get(buildQueryURL('get_entry', restData));
     
     if (response.data && response.data.success && response.data.entry) {
+      logger.info('Lead retrieved successfully', { 
+        leadId,
+        email: response.data.entry.email
+      });
       return response.data.entry;
     }
     
+    logger.warn('Lead retrieval unsuccessful or lead not found', { leadId });
     return null;
   } catch (error) {
-    console.error('Get lead failed:', error);
+    logger.error('Lead retrieval failed', { leadId, error });
     return null;
   }
 } 

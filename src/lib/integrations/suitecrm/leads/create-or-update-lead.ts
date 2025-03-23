@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
+import logger from '@/utils/logger';
 
 /**
  * Creates or updates a lead record in the SuiteCRM system.
@@ -14,6 +15,17 @@ import { buildQueryURL } from '../utils/api-helpers';
  * @returns A Promise that resolves to the ID of the created/updated lead if successful, or null if the operation failed
  */
 export async function createOrUpdateLead(session: string, leadData: Record<string, any>): Promise<string | null> {
+  // Extract lead identifiers for logging
+  const leadEmail = leadData.email1 || leadData.email || 'unknown';
+  const leadId = leadData.id || 'new lead';
+  const isNew = !leadData.id;
+  
+  logger.debug(`${isNew ? 'Creating' : 'Updating'} lead`, { 
+    leadId,
+    email: leadEmail,
+    fieldCount: Object.keys(leadData).length
+  });
+  
   try {
     const restData = {
       session,
@@ -21,15 +33,30 @@ export async function createOrUpdateLead(session: string, leadData: Record<strin
       name_value_list: leadData
     };
     
+    logger.trace('Making set_entry API request for lead', { 
+      action: isNew ? 'create' : 'update',
+      email: leadEmail 
+    });
     const response = await axios.get(buildQueryURL('set_entry', restData));
     
     if (response.data && response.data.id) {
+      logger.info(`Lead ${isNew ? 'created' : 'updated'} successfully`, { 
+        leadId: response.data.id,
+        email: leadEmail
+      });
       return response.data.id;
     }
     
+    logger.warn(`Lead ${isNew ? 'creation' : 'update'} unsuccessful`, { 
+      email: leadEmail 
+    });
     return null;
   } catch (error) {
-    console.error('Create or update lead failed:', error);
+    logger.error(`Lead ${isNew ? 'creation' : 'update'} failed`, { 
+      leadId,
+      email: leadEmail,
+      error
+    });
     return null;
   }
 } 

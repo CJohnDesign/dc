@@ -30,20 +30,12 @@ function UserMenu() {
 
   if (!user) {
     return (
-      <>
-        <Link
-          href="/pricing"
-          className="text-sm font-medium text-gray-700 hover:text-gray-900"
-        >
-          Pricing
-        </Link>
-        <Button
-          asChild
-          className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white text-sm px-4 py-2 rounded-full"
-        >
-          <Link href="/sign-up">Sign Up</Link>
-        </Button>
-      </>
+      <Button
+        asChild
+        className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white text-sm px-4 py-2 rounded-full"
+      >
+        <Link href="/sign-up">Sign Up</Link>
+      </Button>
     );
   }
 
