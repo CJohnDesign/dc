@@ -1,5 +1,5 @@
 import React from 'react';
-import { AssessmentFormData } from '../AssessmentFlow';
+import { AssessmentFormData } from '../assessment-flow';
 
 interface CreditInfoStepProps {
   formData: AssessmentFormData;
