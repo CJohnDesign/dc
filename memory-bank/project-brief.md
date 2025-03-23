@@ -6,6 +6,7 @@
 - Created drizzle tables for potential database integration
 
 ## Next Steps
-- Scaffold dashboard components using ShadCN UI library
-- Reference design mockups stored in `memory-bank/mockups/**` directory
-- Integrate authentication flow with dashboard components
+- [ ] Update fonts to be fixed. Use varaibles. Use Rethink Sans from Google fonts for body, and Merriweather for headings (like on the hero section)
+- [ ] Scaffold dashboard components using ShadCN UI library
+- [ ] Reference design mockups stored in `memory-bank/mockups/**` directory
+- [ ] Integrate authentication flow with dashboard components
