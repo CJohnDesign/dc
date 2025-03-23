@@ -35,7 +35,7 @@ export default function HomePage() {
         {/* Story section with dramatic curve and enhanced shadow */}
         <div className="relative z-10">
           <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-white"></div>
-          <div className="bg-white pt-14 pb-32 rounded-t-[4rem] -mt-16 shadow-[0_-25px_50px_-12px_rgba(0,0,0,0.08)]">
+          <div className="bg-white pt-14 pb-32 rounded-t-[4rem] -mt-16]">
             <OurStorySection />
           </div>
         </div>

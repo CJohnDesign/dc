@@ -9,6 +9,18 @@ interface Lead {
   [key: string]: any;
 }
 
+/**
+ * Authenticates a lead using manual login credentials.
+ * 
+ * This function attempts to authenticate a lead by their username and password
+ * through the SuiteCRM API. It returns the lead's details upon successful
+ * authentication or null if authentication fails.
+ * 
+ * @param session - The active session token for API authentication
+ * @param username - The lead's username
+ * @param password - The lead's password
+ * @returns A Promise that resolves to the lead's details on success, or null on failure
+ */
 export async function manualLeadLogin(
   session: string, 
   username: string, 

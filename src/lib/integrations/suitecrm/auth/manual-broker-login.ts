@@ -8,6 +8,18 @@ interface BrokerDetails {
   [key: string]: any;
 }
 
+/**
+ * Authenticates a broker using manual login credentials.
+ * 
+ * This function attempts to authenticate a broker by their username and password
+ * through the SuiteCRM API. It returns the broker's details upon successful
+ * authentication or null if authentication fails.
+ * 
+ * @param session - The active session token for API authentication
+ * @param username - The broker's username
+ * @param password - The broker's password
+ * @returns A Promise that resolves to the broker's details on success, or null on failure
+ */
 export async function manualBrokerLogin(
   session: string, 
   username: string, 

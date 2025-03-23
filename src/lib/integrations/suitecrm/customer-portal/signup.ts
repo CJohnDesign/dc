@@ -1,6 +1,18 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 
+/**
+ * Registers a new user in the SuiteCRM Customer Portal.
+ * 
+ * This function sends a request to the SuiteCRM API to create a new user account
+ * in the customer portal with the provided username and password. Upon successful
+ * registration, it returns the unique identifier for the newly created user account.
+ * 
+ * @param session - The active session token for API authentication
+ * @param username - The desired username for the new customer portal account
+ * @param password - The password for the new customer portal account
+ * @returns A Promise that resolves to the user's ID string on success, or null on failure
+ */
 export async function customerPortalSignup(session: string, username: string, password: string): Promise<string | null> {
   try {
     const restData = {

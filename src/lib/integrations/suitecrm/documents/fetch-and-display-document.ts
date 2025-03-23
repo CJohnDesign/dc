@@ -2,6 +2,18 @@ import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 import { Document } from './types';
 
+/**
+ * Fetches and displays a document from the SuiteCRM system.
+ * 
+ * This function retrieves a specific document from SuiteCRM based on the provided document ID.
+ * It can optionally request a preview version of the document. The function handles the API
+ * communication and transforms the response into a structured Document object.
+ * 
+ * @param session - The active session token for API authentication
+ * @param documentId - The unique identifier of the document to retrieve
+ * @param preview - Optional parameter to specify whether to include a preview ("yes" or "no"), defaults to "yes"
+ * @returns A Promise that resolves to a Document object if successful, or null if the request fails
+ */
 export async function fetchAndDisplayDocument(
   session: string, 
   documentId: string, 

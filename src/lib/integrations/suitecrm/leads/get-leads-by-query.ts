@@ -2,6 +2,22 @@ import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 import { Lead } from './types';
 
+/**
+ * Retrieves lead records from the SuiteCRM system based on a query.
+ * 
+ * This function queries the SuiteCRM API to fetch lead records that match the provided
+ * query string. It allows for pagination through the offset parameter and limiting results
+ * with maxResults. The function also supports selecting specific fields to retrieve through
+ * the selectFields parameter.
+ * 
+ * @param session - The active session token for API authentication
+ * @param query - The query string to filter leads (follows SuiteCRM query format)
+ * @param selectFields - Optional array of specific fields to retrieve (empty array returns all fields)
+ * @param maxResults - Optional parameter to limit the number of results returned (0 means no limit)
+ * @param offset - Optional pagination offset for retrieving subsequent result sets
+ * @returns A Promise that resolves to an object containing the leads array, total result count,
+ *          and the next offset value for pagination
+ */
 export async function getLeadsByQuery(
   session: string, 
   query: string, 

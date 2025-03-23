@@ -1,6 +1,17 @@
 import axios from 'axios';
 import { buildQueryURL } from '../utils/api-helpers';
 
+/**
+ * Retrieves BDS form data for a specific lead.
+ * 
+ * This function fetches form data from the SuiteCRM API for a given lead ID and
+ * the requested fields. It can be used to populate forms with existing data from the CRM.
+ * 
+ * @param session - The active session token for API authentication
+ * @param leadId - The ID of the lead for which to retrieve form data
+ * @param requestedFields - An object containing the fields to retrieve, with field names as keys
+ * @returns A Promise that resolves to the requested data on success, or null on failure
+ */
 export async function getBDSFormData(
   session: string, 
   leadId: string, 
