@@ -8,7 +8,7 @@ import FundingNeedsStep from './steps/FundingNeedsStep';
 import ReviewStep from './steps/ReviewStep';
 import ProgressBar from './progress-bar';
 import AssessmentHeader from './assessment-header';
-import assessmentData from '@/data/assessment.json';
+import assessmentData from '@/lib/db/examples/example-assessment.json';
 // Define the steps in our assessment flow
 const STEPS = [
   { id: 'business-info', title: 'Business Information' },
@@ -161,7 +161,7 @@ const AssessmentFlow: React.FC = () => {
       // If demo mode is enabled, load the demo data for the next step
       if (DEMO_MODE) {
         const demoData = assessmentData.dummyData;
-        const nextStepId = STEPS[currentStepIndex + 1].id;
+        const nextStepId = STEPS[currentStepIndex + 1]?.id || '';
         
         // Keep current form data
         const updatedFormData = { ...formData };
@@ -236,6 +236,8 @@ const AssessmentFlow: React.FC = () => {
 
   // Render the current step
   const renderStep = () => {
+    if (!currentStep) return null;
+
     switch (currentStep.id) {
       case 'business-info':
         return (
@@ -301,7 +303,7 @@ const AssessmentFlow: React.FC = () => {
       
       <div className="p-6 md:p-8">
         <h2 className="text-xl md:text-2xl font-bold mb-6 text-[var(--secondary)]">
-          {currentStep.title}
+          {currentStep?.title}
         </h2>
         
         <form onSubmit={e => e.preventDefault()}>
