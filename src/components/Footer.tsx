@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import Logo from './logo';
 
 interface FooterProps {
   className?: string;
@@ -53,15 +54,9 @@ const Footer = ({ className = '' }: FooterProps) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Company Info */}
           <div>
-            <Link href="/" className="inline-block mb-6">
-              <Image 
-                src="/dc_logo.png" 
-                alt="Deliver Capital Logo" 
-                width={160} 
-                height={40} 
-                className="h-10 w-auto"
-              />
-            </Link>
+            <div className="inline-block mb-6">
+              <Logo />
+            </div>
             <p className="text-[var(--foreground)] mb-6 max-w-xs">
               Financial optimization services for small businesses seeking growth capital.
             </p>

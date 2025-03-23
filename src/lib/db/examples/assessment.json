@@ -1,0 +1,86 @@
+{
+  "steps": [
+    {
+      "id": "business-info",
+      "title": "Business Information",
+      "fields": [
+        { "name": "businessName", "label": "Business Name", "type": "text", "required": true },
+        { "name": "businessType", "label": "Business Type", "type": "select", "options": ["LLC", "Corporation", "Sole Proprietorship", "Partnership"] },
+        { "name": "industry", "label": "Industry", "type": "select", "options": ["Retail", "Technology", "Healthcare", "Financial Services", "Manufacturing", "Construction", "Other"] },
+        { "name": "yearsInBusiness", "label": "Years in Business", "type": "text" },
+        { "name": "numberOfEmployees", "label": "Number of Employees", "type": "text" },
+        { "name": "businessAddress", "label": "Business Address", "type": "text" },
+        { "name": "businessCity", "label": "City", "type": "text" },
+        { "name": "businessState", "label": "State", "type": "text" },
+        { "name": "businessZip", "label": "ZIP Code", "type": "text" }
+      ]
+    },
+    {
+      "id": "financial-info",
+      "title": "Financial Details",
+      "fields": [
+        { "name": "annualRevenue", "label": "Annual Revenue", "type": "text", "required": true },
+        { "name": "monthlyRevenue", "label": "Monthly Revenue", "type": "text" },
+        { "name": "currentDebt", "label": "Current Business Debt", "type": "text" },
+        { "name": "profitMargin", "label": "Profit Margin", "type": "text" }
+      ]
+    },
+    {
+      "id": "credit-info",
+      "title": "Credit Information",
+      "fields": [
+        { "name": "creditScore", "label": "Credit Score Range", "type": "select", "options": ["Excellent (750+)", "Good (700-749)", "Fair (650-699)", "Poor (below 650)"] },
+        { "name": "bankruptcies", "label": "Bankruptcies in Last 7 Years", "type": "select", "options": ["0", "1", "2", "3+"] },
+        { "name": "taxLiens", "label": "Tax Liens", "type": "select", "options": ["Yes", "No"] },
+        { "name": "judgments", "label": "Judgments", "type": "select", "options": ["Yes", "No"] }
+      ]
+    },
+    {
+      "id": "funding-needs",
+      "title": "Funding Needs",
+      "fields": [
+        { "name": "fundingAmount", "label": "Amount Needed", "type": "text", "required": true },
+        { "name": "fundingPurpose", "label": "Purpose of Funding", "type": "select", "options": ["Expansion", "Equipment", "Inventory", "Working Capital", "Debt Refinancing", "Other"] },
+        { "name": "timeframe", "label": "Timeframe", "type": "select", "options": ["Immediate", "1-3 Months", "3-6 Months", "6+ Months"] },
+        { "name": "preferredTerms", "label": "Preferred Terms", "type": "select", "options": ["Short term (< 1 year)", "Medium term (1-3 years)", "Long term (3+ years)"] }
+      ]
+    },
+    {
+      "id": "review",
+      "title": "Review & Submit",
+      "fields": [
+        { "name": "ownerName", "label": "Owner's Name", "type": "text", "required": true },
+        { "name": "ownerEmail", "label": "Email", "type": "email", "required": true },
+        { "name": "ownerPhone", "label": "Phone", "type": "tel", "required": true },
+        { "name": "bestTimeToContact", "label": "Best Time to Contact", "type": "select", "options": ["Morning", "Afternoon", "Evening"] }
+      ]
+    }
+  ],
+  "demoData": {
+    "businessName": "Acme Innovations",
+    "businessType": "LLC",
+    "industry": "Technology",
+    "yearsInBusiness": "5",
+    "numberOfEmployees": "12",
+    "businessAddress": "123 Business St",
+    "businessCity": "San Francisco",
+    "businessState": "CA",
+    "businessZip": "94103",
+    "annualRevenue": "1,500,000",
+    "monthlyRevenue": "125,000",
+    "currentDebt": "250,000",
+    "profitMargin": "18%",
+    "creditScore": "Good (700-749)",
+    "bankruptcies": "0",
+    "taxLiens": "No",
+    "judgments": "No",
+    "fundingAmount": "350,000",
+    "fundingPurpose": "Expansion",
+    "timeframe": "1-3 Months",
+    "preferredTerms": "Medium term (1-3 years)",
+    "ownerName": "Jane Smith",
+    "ownerEmail": "jane@acmeinnovations.com",
+    "ownerPhone": "(415) 555-1234",
+    "bestTimeToContact": "Afternoon"
+  }
+} 

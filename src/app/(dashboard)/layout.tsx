@@ -11,8 +11,8 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useUser } from '../../../lib/auth';
-import { signOut } from '@/app/(dashboard)/(login)/actions';
+import { useUser } from '@/lib/auth';
+import { signOut } from '../(dashboard)/(login)/actions';
 import { useRouter } from 'next/navigation';
 
 function UserMenu() {
@@ -54,7 +54,7 @@ function UserMenu() {
           <AvatarFallback>
             {user.email
               .split(' ')
-              .map((n) => n[0])
+              .map((n: string) => n[0])
               .join('')}
           </AvatarFallback>
         </Avatar>

@@ -15,31 +15,51 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white via-[var(--background)] to-white text-[var(--foreground)] overflow-hidden">
+    <main className="min-h-screen relative overflow-hidden">
+      {/* Background gradients */}
+      <div className="fixed inset-0 bg-gradient-to-b from-white via-gray-50 to-white -z-20" />
+      
+      {/* Animated gradients */}
+      <div className="fixed top-0 left-0 w-[100vw] h-[100vh] bg-gradient-radial from-[var(--chart-3)]/5 to-transparent opacity-70 animate-pulse -z-10" style={{ animationDuration: '15s' }} />
+      <div className="fixed bottom-0 right-0 w-[100vw] h-[100vh] bg-gradient-radial from-[var(--chart-1)]/5 to-transparent opacity-70 animate-pulse -z-10" style={{ animationDuration: '18s' }} />
+      
       <Navigation />
       
-      {/* Main content sections with subtle spacing and flow */}
+      {/* Main content sections with enhanced visual hierarchy */}
       <div className="relative">
-        {/* Abstract shapes for visual interest */}
-        <div className="absolute top-[10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[var(--primary-light)]/5 blur-[120px] -z-10" />
-        <div className="absolute top-[40%] left-[-10%] w-[800px] h-[800px] rounded-full bg-[var(--secondary)]/5 blur-[150px] -z-10" />
+        {/* Hero section with full bleed design */}
+        <div className="relative">
+          <HeroSection className="mb-0" />
+        </div>
         
-        <div className="space-y-0">
-          <HeroSection />
-          
-          <div className="relative z-10 bg-white py-20 rounded-t-[3rem] -mt-12 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.05)]">
+        {/* Story section with dramatic curve and enhanced shadow */}
+        <div className="relative z-10">
+          <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-white"></div>
+          <div className="bg-white pt-14 pb-32 rounded-t-[4rem] -mt-16 shadow-[0_-25px_50px_-12px_rgba(0,0,0,0.08)]">
             <OurStorySection />
           </div>
-          
-          <div className="relative z-20 bg-[var(--background-warm)] py-20 -mt-12 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.05)]">
+        </div>
+        
+        {/* Core process with richer background and improved transitions */}
+        <div className="relative z-20">
+          <div className="bg-gradient-to-br from-[hsl(197,37%,96%)] to-[hsl(197,37%,92%)] pt-20 pb-32 -mt-16 shadow-[0_-15px_30px_-15px_rgba(0,0,0,0.1)]">
+            <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-white to-transparent"></div>
             <CoreProcessSection />
           </div>
-          
-          <div className="relative z-30 bg-white py-20 -mt-12 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.05)]">
+        </div>
+        
+        {/* Client journey with cleaner background and stronger shadow */}
+        <div className="relative z-30">
+          <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-[hsl(197,37%,92%)] to-transparent"></div>
+          <div className="bg-white pt-20 pb-40 -mt-16 shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.12)]">
             <ClientJourneySection />
           </div>
-          
-          <div className="relative z-40 bg-[var(--primary)] text-white py-20 rounded-t-[3rem] -mt-12 shadow-[0_-10px_30px_-15px_rgba(0,0,0,0.1)]">
+        </div>
+        
+        {/* CTA with more dramatic curve and gradient background */}
+        <div className="relative z-40">
+          <div className="bg-gradient-to-br from-[var(--chart-3)] to-[hsl(210,50%,25%)] text-white pt-24 pb-32 rounded-t-[5rem] -mt-24 shadow-[0_-30px_60px_-20px_rgba(0,0,0,0.2)]">
+            <div className="absolute inset-0 bg-[url('/images/texture-overlay.png')] opacity-5 mix-blend-overlay"></div>
             <CtaSection />
           </div>
         </div>

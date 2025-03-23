@@ -24,7 +24,7 @@ import { getUser, getUserWithTeam } from '@/lib/db/queries';
 import {
   validatedAction,
   validatedActionWithUser,
-} from '../../../../lib/auth/middleware';
+} from '@/lib/auth/middleware';
 
 async function logActivity(
   teamId: number | null | undefined,

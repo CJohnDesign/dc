@@ -37,7 +37,7 @@ const OurStorySection = ({ className = '' }: OurStorySectionProps) => {
                    ? 'transform 0.6s ease-in, opacity 0.6s ease-in'
                    : 'transform 0.7s ease-out, opacity 0.7s ease-out'
                }}>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-[var(--secondary)]">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
               Insider Knowledge, <br className="hidden sm:block" />Exceptional Results
             </h2>
             

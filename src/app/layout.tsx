@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { fontVariables } from "../../lib/fonts";
+import { fontVariables } from "../lib/fonts";
 import "./globals.css";
 
 export const viewport: Viewport = {
