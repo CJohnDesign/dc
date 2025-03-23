@@ -14,7 +14,7 @@ const CoreProcessSection = ({ className = '' }: CoreProcessSectionProps) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry && entry.isIntersecting) {
           setIsVisible(true);
           observer.disconnect();
         }

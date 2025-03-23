@@ -1,0 +1,43 @@
+# Project Rules for Deliver Capital Dashboard
+
+## General Principles
+- Maintain a clean, professional visual aesthetic appropriate for a financial service
+- Prioritize responsive design with a mobile-first approach
+- Follow accessibility best practices (WCAG 2.1 AA compliance)
+- Ensure consistency in UI components and styling
+
+## Code Standards
+- Use TypeScript for type safety
+- Prefer functional components with hooks
+- Use interfaces over types for object definitions
+- Maintain clean folder structure with logical component organization
+- Follow the Next.js App Router conventions
+- Minimize client-side JavaScript and use Server Components where possible
+
+## Styling Guidelines
+- Use Tailwind CSS for styling
+- Body text: Rethink Sans from Google Fonts
+- Headings: Merriweather from Google Fonts
+- Follow the color palette defined in tailwind.config.ts
+- Maintain consistent spacing using Tailwind's spacing scale
+- Use ShadCN components extended with custom styling when needed
+
+## Performance Considerations
+- Optimize images (WebP format, appropriate sizing)
+- Lazy load non-critical components
+- Use React.Suspense for loading states
+- Minimize third-party dependencies
+- Ensure fast initial page load and time-to-interactive
+
+## Development Workflow
+- Use pnpm as the package manager
+- Use the Next.js development server: `pnpm dev`
+- Reference mockups in memory-bank/mockups directory
+- Follow component naming conventions: PascalCase for components, kebab-case for files
+- Organize components in logical folders that reflect their purpose
+
+## Deployment
+- Ensure all environment variables are properly configured
+- Run build tests locally before deployment
+- Check for console errors and warnings
+- Verify responsive design on multiple viewports 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { getUser } from "@/lib/auth/middleware";
 import { UserProvider } from "@/lib/auth";
+import { fontVariables } from "@/lib/fonts";
 
 
 export const metadata: Metadata = {
@@ -30,7 +31,7 @@ export default function RootLayout({
   let userPromise = getUser();
   return (
     <html lang="en" 
-    className={`bg-white dark:bg-gray-950 text black dark:text-white $fontVariables}`}>
+    className={`bg-white dark:bg-gray-950 text black dark:text-white ${fontVariables}`}>
       <body className="min-h-[100dvh] bg-gray-50 antialiased">
         <UserProvider userPromise={userPromise}>
           {children}
