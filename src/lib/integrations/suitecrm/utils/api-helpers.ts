@@ -1,3 +1,4 @@
+import logger from "@/utils/logger";
 
 /**
  * Base URL for the SuiteCRM API endpoints.

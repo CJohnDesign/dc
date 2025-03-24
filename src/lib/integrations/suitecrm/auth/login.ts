@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { buildQueryURL } from '../utils/api-helpers';
+import { API_BASE_URL, buildQueryURL } from '../utils/api-helpers';
 import logger from '@/utils/logger';
 
 /**
@@ -7,6 +7,13 @@ import logger from '@/utils/logger';
  */
 interface LoginResponse {
   id: string;
+  module_name?: string;
+  name_value_list?: Record<string, any>;
+  error?: {
+    number?: string;
+    name?: string;
+    description?: string;
+  };
 }
 
 /**
@@ -25,7 +32,7 @@ export async function login(username: string, password: string): Promise<string>
   logger.debug('Attempting SuiteCRM login', { username });
   
   try {
-    const restData = {
+    const payload = {
       user_auth: {
         user_name: username,
         password: password,
@@ -34,14 +41,29 @@ export async function login(username: string, password: string): Promise<string>
       application: "Autobot"
     };
     
-    logger.trace('Making SuiteCRM login request');
-    const response = await axios.get<LoginResponse>(buildQueryURL('login', restData));
+    logger.debug('SuiteCRM login request payload:', payload);
+    
+    // Use direct POST instead of building a URL with parameters
+    const response = await axios.post(
+      API_BASE_URL,
+      null,
+      {
+        params: {
+          input_type: 'JSON',
+          method: 'login',
+          response_type: 'JSON',
+          rest_data: JSON.stringify(payload)
+        }
+      }
+    );
+    
+    logger.debug('SuiteCRM login response:', JSON.stringify(response.data));
     
     if (response.data && response.data.id) {
       logger.info('SuiteCRM login successful');
       return response.data.id;
     } else {
-      logger.error('SuiteCRM login failed: Invalid response structure');
+      logger.error('SuiteCRM login failed: Invalid response structure', response.data);
       throw new Error('Login failed: Invalid response');
     }
   } catch (error) {
