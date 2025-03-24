@@ -124,8 +124,8 @@ const ClientJourneySection = ({ className = '' }: ClientJourneySectionProps) => 
                   CJ
                 </div>
                 <div className="text-center sm:text-left">
-                  <p className="font-semibold text-[var(--secondary)]">Chris Johnston</p>
-                  <p className="text-sm text-[var(--foreground)]">Founder, PostScarcity AI</p>
+                  <p className="font-semibold text-primary">Chris Johnston</p>
+                  <p className="text-sm text-primary">Founder, PostScarcity AI</p>
                 </div>
               </div>
             </div>
