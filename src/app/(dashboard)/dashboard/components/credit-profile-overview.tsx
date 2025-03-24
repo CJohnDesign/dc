@@ -6,6 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ActiveTradelineIcon, TradelineGaugeIcon, NegativeIcon } from "@/components/icons";
 import CreditScoreIndicator from "@/components/credit-score-indicator";
+import TradelineStats from "./tradeline-stats";
 
 interface CreditScoreProps {
   score: number;
@@ -51,37 +52,8 @@ export default function CreditProfileOverview({
             priority
           />
           
-          {/* Credit Stat Cards */}
-          <div className="grid grid-cols-3 gap-4 mt-6">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
-              <div className="flex-shrink-0">
-                <ActiveTradelineIcon className="w-10 h-10" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm text-gray-600 truncate">Active Tradelines</h4>
-                <p className="text-4xl font-bold text-gray-900">4</p>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
-              <div className="flex-shrink-0">
-                <TradelineGaugeIcon className="w-10 h-10" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm text-gray-600 truncate">Tradelines Over 30%</h4>
-                <p className="text-4xl font-bold text-gray-900">2</p>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
-              <div className="flex-shrink-0">
-                <NegativeIcon className="w-10 h-10" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm text-gray-600 truncate">Tradelines with Negatives</h4>
-                <p className="text-4xl font-bold text-gray-900">1</p>
-              </div>
-            </div>
+          <div className="mt-6">
+            <TradelineStats />
           </div>
         </div>
 

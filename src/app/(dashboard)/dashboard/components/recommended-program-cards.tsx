@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { CreditCardIcon, LoanIcon, LoanApprovedIcon } from '@/components/icons';
+import { Card, CardHeader, CardFooter } from '@/components/ui/card';
 
 interface Program {
   id: string;
@@ -39,36 +40,31 @@ const ProgramOfferCards: React.FC = () => {
   ];
 
   return (
-    <div className="w-full mb-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {programs.map((program) => {
-          const { IconComponent } = program;
-          return (
-            <div 
-              key={program.id}
-              className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex items-center gap-4 hover:shadow-md transition-shadow"
-            >
-              <div className="flex-shrink-0">
-                <IconComponent className="w-16 h-16" />
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-900 truncate">{program.title}</h4>
+    <div className="flex flex-row gap-4 justify-center">
+      {programs.map((program) => {
+        const { IconComponent } = program;
+        return (
+          <Card key={program.id} className="flex flex-col w-[280px]">
+            <CardHeader className="flex-row items-center gap-4">
+              <IconComponent className="w-16 h-16 flex-shrink-0" />
+              <div>
+                <h4 className="font-medium text-sm text-gray-900">{program.title}</h4>
                 {program.amount && (
                   <p className="text-lg font-bold text-gray-900">${program.amount}</p>
                 )}
               </div>
-
+            </CardHeader>
+            <CardFooter>
               <Link 
                 href={program.href}
-                className="flex-shrink-0 px-3 py-1.5 rounded text-sm font-medium text-indigo-600 hover:bg-indigo-50 transition-colors"
+                className="w-1/2 text-center px-3 py-1.5 rounded text-sm font-medium text-indigo-600 hover:bg-indigo-50 transition-colors"
               >
                 Learn More
               </Link>
-            </div>
-          );
-        })}
-      </div>
+            </CardFooter>
+          </Card>
+        );
+      })}
     </div>
   );
 };

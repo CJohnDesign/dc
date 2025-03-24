@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-bold;
-  }
-}
-
 /* Define custom CSS variables for light and dark background colors */
 :root {
   --background-light: #f9fafb;
@@ -288,7 +282,7 @@ table {
 /* Apply base styles */
 @layer base {
   * {
-    @apply border-[color:var(--border)];
+    @apply border-border;
   }
   html {
     @apply scroll-smooth;

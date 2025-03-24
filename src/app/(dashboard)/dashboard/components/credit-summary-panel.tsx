@@ -1,6 +1,13 @@
 import React from 'react';
 import { ArrowUp, ArrowDown, HelpCircle, TrendingUp, Info } from 'lucide-react';
 import CreditScoreIndicator from '@/components/credit-score-indicator';
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export interface CreditSummary {
   score: number;
@@ -26,27 +33,47 @@ const CreditSummaryPanel: React.FC<CreditSummaryPanelProps> = ({ data }) => {
     return 'text-green-500';
   };
 
-  const MetricItem = ({ label, value, tooltip, status }: { label: string; value: string | number; tooltip?: string; status?: 'positive' | 'negative' | 'neutral' }) => (
-    <div className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
-      <div className="flex items-center gap-1">
-        <span className="text-sm">{label}</span>
-        {tooltip && (
-          <div className="relative group">
-            <HelpCircle size={14} className="opacity-50" />
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
-              {tooltip}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="flex items-center gap-1">
-        <span className={`font-medium ${status === 'positive' ? 'text-green-500' : status === 'negative' ? 'text-red-500' : ''}`}>
-          {value}
-        </span>
-        {status === 'positive' && <ArrowUp size={14} className="text-green-500" />}
-        {status === 'negative' && <ArrowDown size={14} className="text-red-500" />}
-      </div>
-    </div>
+  const MetricItem = ({ 
+    label, 
+    value, 
+    tooltip, 
+    status 
+  }: { 
+    label: string; 
+    value: string | number; 
+    tooltip?: string; 
+    status?: 'positive' | 'negative' | 'neutral' 
+  }) => (
+    <Card className="border-0 shadow-none">
+      <CardContent className="flex justify-between items-center p-2 border-b border-gray-100 last:border-0">
+        <div className="flex items-center gap-1">
+          <span className="text-sm text-muted-foreground">{label}</span>
+          {tooltip && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <HelpCircle size={14} className="text-muted-foreground/50" />
+                </TooltipTrigger>
+                <TooltipContent className="w-48">
+                  <p className="text-xs">{tooltip}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
+        <div className="flex items-center gap-1">
+          <span className={`font-medium ${
+            status === 'positive' ? 'text-green-500' : 
+            status === 'negative' ? 'text-red-500' : 
+            'text-foreground'
+          }`}>
+            {value}
+          </span>
+          {status === 'positive' && <ArrowUp size={14} className="text-green-500" />}
+          {status === 'negative' && <ArrowDown size={14} className="text-red-500" />}
+        </div>
+      </CardContent>
+    </Card>
   );
 
   // Score recommendations based on the demo implementation

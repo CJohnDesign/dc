@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import CreditProfileOverview from "./components/credit-profile-overview";
 import AccountsTable from "./components/accounts-table";
-import ProgramOfferCards from "./components/program-offer-cards";
+import ProgramOfferCards from "./components/recommended-program-cards";
 import { getAccounts, getCreditSummary } from "./utils/dataProvider";
 
 export default function HomePage() {
