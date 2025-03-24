@@ -1,12 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { InfoIcon } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { ActiveTradelineIcon, TradelineGaugeIcon, NegativeIcon } from "@/components/icons";
-import CreditScoreIndicator from "@/components/credit-score-indicator";
 import TradelineStats from "./tradeline-stats";
+import { CreditUtilizationCard } from "./credit-utilization-card";
+import { CreditScoreCard } from "./credit-score-card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface CreditScoreProps {
   score: number;
@@ -38,7 +36,12 @@ export default function CreditProfileOverview({
   
   return (
     <div className="space-y-6">
+      <div className="flex flex-row justify-between">
+
       <h2 className="text-2xl font-bold text-[#1e3a4f]">Credit Profile Overview</h2>
+      <h2 className="text-2xl font-bold text-[#1e3a4f]">Credit Summary</h2>
+
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Promotional Banner */}
@@ -57,58 +60,21 @@ export default function CreditProfileOverview({
           </div>
         </div>
 
-        {/* Credit Summary Card */}
+        {/* Credit Summary Section */}
         <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-            <div className="mb-4">
-              <h3 className="font-semibold text-gray-900">Credit Summary</h3>
-            </div>
-            <div className="space-y-8">
-              {/* Credit Utilization */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Credit Utilization</span>
-                  <span className="text-base font-medium">{utilization}%</span>
-                </div>
-                <Slider 
-                  value={[utilization]} 
-                  max={100} 
-                  disabled 
-                />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>0%</span>
-                  <span>50%</span>
-                  <span>100%</span>
-                </div>
-              </div>
-
-              {/* Credit Score - Updated to use CreditScoreIndicator */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Your Score</span>
-                  <span className="text-xs text-muted-foreground flex items-center gap-1">
-                    <InfoIcon className="h-3 w-3" />
-                    Details
-                  </span>
-                </div>
-                
-                <div className="flex flex-col items-center">
-                  <CreditScoreIndicator score={creditScore.score} className="scale-75" />
-                  
-                  {/* Add recommendation text */}
-                  <p className="text-xs text-muted-foreground text-center mt-2">
-                    {getScoreRecommendation(creditScore.score)}
-                  </p>
-                  
-                  {creditScore.lastUpdated && (
-                    <div className="text-xs text-muted-foreground mt-2">
-                      Updated on {creditScore.lastUpdated}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Additional Stats */}
+          <CreditUtilizationCard utilization={utilization} />
+          <CreditScoreCard 
+            score={creditScore.score}
+            rating={creditScore.rating}
+            lastUpdated={creditScore.lastUpdated}
+          />
+          
+          {/* Additional Stats Card */}
+          <Card className="hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle className="text-base font-semibold text-gray-900">Additional Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <div className="text-sm text-muted-foreground">Inquiries</div>
@@ -119,8 +85,8 @@ export default function CreditProfileOverview({
                   <div className="text-lg font-medium">13y 4m</div>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
