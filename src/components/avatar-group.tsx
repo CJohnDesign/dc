@@ -27,11 +27,11 @@ export function AvatarGroup({
   const remainingCount = displayUsers.length - displayCount
   
   return (
-    <div className={cn("flex items-center", className)}>
+    <div className={cn("flex flex-row justify-center", className)}>
       {displayUsers.slice(0, displayCount).map((user, index) => (
         <div 
           key={index}
-          className="relative rounded-full ring-2 ring-background transition-transform hover:translate-y-1"
+          className="flex flex-row justify-start rounded-full ring-2 ring-background transition-transform hover:translate-y-1"
           style={{ 
             marginLeft: index === 0 ? 0 : `-${overlapPercent}%`,
             zIndex: displayCount - index,

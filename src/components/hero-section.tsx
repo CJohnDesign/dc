@@ -103,7 +103,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
                   asChild
                   variant="outline"
                   size="lg"
-                  className="rounded-full px-8 h-14 text-base border-blue-900/80 hover:bg-blue-900/5 hover:text-gray-800 hover:border-blue-900 transition-all duration-300 ease-out w-full sm:w-auto"
+                  className="rounded-full h-14 text-base border-blue-900/80 hover:bg-blue-900/5 hover:text-gray-800 hover:border-blue-900 transition-all duration-300 ease-out w-full sm:w-auto"
                 >
                   <a href="/how-it-works" className="flex items-center gap-2">
                     How It Works
@@ -112,18 +112,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
                 </Button>
               </div>
             </div>
-            <div className="container mt-8 flex items-center gap-3">
+            <div className="mt-8 flex flex-row justify-start">
               <AvatarGroup 
                 count={12} 
                 maxDisplay={6} 
                 overlapPercent={25} 
                 className="shrink-0"
               />
+              <div>
               <p className="text-sm md:text-base">
                 <span className="text-primary font-semibold">500+</span>{" "}
                 businesses funded this year
               </p>
-            </div>
+              </div>
+           </div>
           </div>
 
           <div className="lg:col-span-5 order-1 lg:order-2">
