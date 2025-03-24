@@ -1,25 +1,3 @@
-# Project Status
+We need to update the credit summary components to use a real data call. it's located in `credit-profile-overview.tsx`
+Review the api docs in swagger-docs.yml and use the methods in the integrations folder to get the data. 
 
-## Completed
-- Set up integration methods and organized them in the integrations folder
-- Implemented authentication middleware to manage sessions using SuiteCRM
-- Created drizzle tables for potential database integration
-- Updated fonts using Rethink Sans from Google fonts for body and Merriweather for headings
-- Fixed the home page fonts to address white text visibility issues (Apply Now button, core-process-section, and client-journey-section)
-- Standardized color system using Tailwind's primary color (#6271EB) instead of CSS variables
-- [x] Update routes for dashboard page in `src/app/(dashboard)/dashboard/layout.tsx`. 
-  - home (which is /dashboard)
-  - credit (/credit)
-  - solutions (/solutions)
-- [x] Add logging utility
-- [x] Wrap all methods in logging utility
-- [x] Integrate authentication flow with dashboard components
-
-## Next Steps
-
-- [ ] Create the pages for the routes above. 
-  - [ ] The home page should have designs that look like @/memory-bank/mockups/1-Home.png. Use the components from shadcn/ui and tailwind css to create the page. 
-  - [ ] The credit page should have designs that look like @/memory-bank/mockups/2-Credit.png. Use the components from shadcn/ui and tailwind css to create the page. 
-  - [ ] The solutions page should have designs that look like @/memory-bank/mockups/3-Solutions.png. Use the components from shadcn/ui and tailwind css to create the page. 
-- [ ] Scaffold dashboard components using ShadCN UI library
-- [ ] Reference design mockups stored in `memory-bank/mockups/**` directory
