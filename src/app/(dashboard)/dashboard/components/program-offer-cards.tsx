@@ -2,55 +2,54 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { CreditCard, Store, User, LucideIcon, ArrowRight } from 'lucide-react';
-// TODO: Update this to use real data. 
-import programsData from '@/lib/db/examples/example-programs.json';
-
-// Define the icon mapping
-const iconMap: Record<string, LucideIcon> = {
-  'CreditCard': CreditCard,
-  'Store': Store,
-  'User': User
-};
+import { CreditCardIcon, LoanIcon, LoanApprovedIcon } from '@/components/icons';
 
 interface Program {
   id: string;
   title: string;
-  amount?: string;
-  shortDescription: string;
-  iconType: string;
-  iconColor: string;
+  amount: string;
+  IconComponent: React.FC<React.SVGProps<SVGSVGElement> & { className?: string }>;
+  href: string;
 }
 
 const ProgramOfferCards: React.FC = () => {
-  // Get the program data (first 3 programs or fewer)
-  const programs: Program[] = programsData.slice(0, 3);
+  // Define the programs with their respective icons and data
+  const programs: Program[] = [
+    {
+      id: 'credit-card',
+      title: 'Credit Card Program',
+      amount: '50,000',
+      IconComponent: CreditCardIcon,
+      href: '/dashboard/programs#credit-card'
+    },
+    {
+      id: 'business-loan',
+      title: 'Business Loan Program',
+      amount: '250,000',
+      IconComponent: LoanIcon,
+      href: '/dashboard/programs#business-loan'
+    },
+    {
+      id: 'personal-loan',
+      title: 'Personal Loan Program',
+      amount: '150,000',
+      IconComponent: LoanApprovedIcon,
+      href: '/dashboard/programs#personal-loan'
+    }
+  ];
 
   return (
     <div className="w-full mb-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-heading font-bold text-[#1e3a4f]">Recommended Offers</h3>
-        <Link 
-          href="/dashboard/programs"
-          className="text-sm text-[#1e3a4f] font-medium hover:underline flex items-center gap-1"
-        >
-          View All <ArrowRight size={14} />
-        </Link>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {programs.map((program) => {
-          const Icon = iconMap[program.iconType];
+          const { IconComponent } = program;
           return (
             <div 
               key={program.id}
               className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex items-center gap-4 hover:shadow-md transition-shadow"
             >
-              <div 
-                className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" 
-                style={{ backgroundColor: `${program.iconColor}20` }}
-              >
-                {Icon && <Icon size={20} style={{ color: program.iconColor }} />}
+              <div className="flex-shrink-0">
+                <IconComponent className="w-16 h-16" />
               </div>
 
               <div className="flex-1 min-w-0">
@@ -61,11 +60,10 @@ const ProgramOfferCards: React.FC = () => {
               </div>
 
               <Link 
-                href={`/dashboard/programs#${program.id}`}
-                className="flex-shrink-0 px-3 py-1.5 rounded text-sm font-medium text-white"
-                style={{ backgroundColor: program.iconColor }}
+                href={program.href}
+                className="flex-shrink-0 px-3 py-1.5 rounded text-sm font-medium text-indigo-600 hover:bg-indigo-50 transition-colors"
               >
-                Apply
+                Learn More
               </Link>
             </div>
           );

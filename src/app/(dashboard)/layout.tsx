@@ -106,11 +106,7 @@ function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <div className="flex items-center">
           <Logo href="/" className="text-xl" />
-          {user && (
-            <div className="ml-8 text-foreground font-medium">
-              Welcome back, <span className="text-primary">{user.firstName || 'Admin'}</span>
-            </div>
-          )}
+
         </div>
         <div className="flex items-center space-x-4">
           {user && (
