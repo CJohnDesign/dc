@@ -9,7 +9,7 @@ import {
   Menu,
   CreditCard,
   Lightbulb,
-  User
+  // User
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -23,7 +23,7 @@ export default function DashboardLayout({
     { icon: Home, label: 'Home', href: '/dashboard' },
     { icon: CreditCard, label: 'Credit', href: '/dashboard/credit' },
     { icon: Lightbulb, label: 'Solutions', href: '/dashboard/solutions' },
-    { icon: User, label: 'General', href: '/dashboard/general' },
+    // { icon: User, label: 'General', href: '/dashboard/general' },
     { icon: CreditCard, label: 'Programs', href: '/dashboard/programs' },
     { icon: CreditCard, label: 'Security', href: '/dashboard/security' },
   ];
