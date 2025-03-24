@@ -47,9 +47,6 @@ export default function HomePage() {
       
       {/* Credit Accounts */}
       <div>
-        <h3 className="text-lg font-heading font-bold mb-3 text-[#1e3a4f]">
-          Credit Accounts
-        </h3>
         <AccountsTable accounts={accounts} />
       </div>
     </div>
