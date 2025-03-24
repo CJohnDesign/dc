@@ -1,3 +1,6 @@
-We need to update the credit summary components to use a real data call. it's located in `credit-profile-overview.tsx`
-Review the api docs in swagger-docs.yml and use the methods in the integrations folder to get the data. 
+update the credit summary panel to use the new ui which is in `credit-score-indicator.tsx` and `credit-score-demo.tsx` is a demo of the new ui. 
+
+the credit summary panel is in `credit-summary-panel.tsx`
+
+
 

@@ -19,21 +19,7 @@ interface CreditSummaryPanelProps {
 }
 
 const CreditSummaryPanel: React.FC<CreditSummaryPanelProps> = ({ data }) => {
-  const getScoreColor = (rating: string) => {
-    switch (rating) {
-      case 'Poor':
-        return 'text-gray-500';
-      case 'Fair':
-        return 'text-amber-500';
-      case 'Good':
-        return 'text-lime-500';
-      case 'Excellent':
-        return 'text-gray-400';
-      default:
-        return 'text-gray-500';
-    }
-  };
-
+  // This function is no longer needed as the CreditScoreIndicator handles color coding
   const getUtilizationColor = (utilization: number) => {
     if (utilization > 50) return 'text-red-500';
     if (utilization > 30) return 'text-amber-500';
@@ -63,6 +49,15 @@ const CreditSummaryPanel: React.FC<CreditSummaryPanelProps> = ({ data }) => {
     </div>
   );
 
+  // Score recommendations based on the demo implementation
+  const getScoreRecommendation = (score: number) => {
+    if (score < 580) return "Your score needs improvement. Consider paying bills on time and reducing debt.";
+    if (score < 670) return "Your score is fair. Continue making payments on time to improve it.";
+    if (score < 740) return "Your score is good. You qualify for most loans at competitive rates.";
+    if (score < 800) return "Your score is very good. You qualify for premium rates on most loans.";
+    return "Your score is exceptional. You qualify for the best rates available.";
+  };
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       {/* Score Header */}
@@ -75,9 +70,14 @@ const CreditSummaryPanel: React.FC<CreditSummaryPanelProps> = ({ data }) => {
           </button>
         </div>
         
-        {/* Credit Score Component */}
+        {/* Credit Score Component - Updated to use new UI */}
         <div className="flex flex-col items-center">
           <CreditScoreIndicator score={data.score} />
+          
+          {/* Add recommendation text similar to the demo */}
+          <p className="text-sm text-muted-foreground text-center mt-4 px-4">
+            {getScoreRecommendation(data.score)}
+          </p>
           
           {/* Last updated */}
           {data.lastUpdated && (

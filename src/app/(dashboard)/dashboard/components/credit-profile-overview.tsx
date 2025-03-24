@@ -5,6 +5,7 @@ import { InfoIcon } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ActiveTradelineIcon, TradelineGaugeIcon, NegativeIcon } from "@/components/icons";
+import CreditScoreIndicator from "@/components/credit-score-indicator";
 
 interface CreditScoreProps {
   score: number;
@@ -25,6 +26,15 @@ export default function CreditProfileOverview({
     lastUpdated: "Mar 28, 2024",
   },
 }: CreditProfileOverviewProps) {
+  // Score recommendations based on the score value
+  const getScoreRecommendation = (score: number) => {
+    if (score < 580) return "Your score needs improvement. Consider paying bills on time and reducing debt.";
+    if (score < 670) return "Your score is fair. Continue making payments on time to improve it.";
+    if (score < 740) return "Your score is good. You qualify for most loans at competitive rates.";
+    if (score < 800) return "Your score is very good. You qualify for premium rates on most loans.";
+    return "Your score is exceptional. You qualify for the best rates available.";
+  };
+  
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-[#1e3a4f]">Credit Profile Overview</h2>
@@ -100,7 +110,7 @@ export default function CreditProfileOverview({
                 </div>
               </div>
 
-              {/* Credit Score */}
+              {/* Credit Score - Updated to use CreditScoreIndicator */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm">Your Score</span>
@@ -111,8 +121,13 @@ export default function CreditProfileOverview({
                 </div>
                 
                 <div className="flex flex-col items-center">
-                  <div className="text-5xl font-bold">{creditScore.score}</div>
-                  <div className="text-sm text-muted-foreground">{creditScore.rating}</div>
+                  <CreditScoreIndicator score={creditScore.score} className="scale-75" />
+                  
+                  {/* Add recommendation text */}
+                  <p className="text-xs text-muted-foreground text-center mt-2">
+                    {getScoreRecommendation(creditScore.score)}
+                  </p>
+                  
                   {creditScore.lastUpdated && (
                     <div className="text-xs text-muted-foreground mt-2">
                       Updated on {creditScore.lastUpdated}
