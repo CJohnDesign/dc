@@ -58,13 +58,15 @@ export default function DashboardLayout({
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} passHref>
                 <Button
-                  variant={pathname === item.href ? 'secondary' : 'ghost'}
-                  className={`shadow-none my-1 w-full justify-start ${
-                    pathname === item.href ? 'bg-gray-100' : ''
+                  variant="ghost"
+                  className={`shadow-none my-1 w-full justify-start hover:bg-[#E7EBF8] ${
+                    pathname === item.href 
+                      ? 'bg-blue-50 text-[#6271EB] font-medium' 
+                      : ''
                   }`}
                   onClick={() => setIsSidebarOpen(false)}
                 >
-                  <item.icon className="mr-2 h-4 w-4" />
+                  <item.icon className={`mr-2 h-4 w-4 ${pathname === item.href ? 'text-[#6271EB]' : ''}`} />
                   {item.label}
                 </Button>
               </Link>
