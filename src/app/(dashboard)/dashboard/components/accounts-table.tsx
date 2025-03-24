@@ -1,9 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Filter, Download, CreditCard, Home, Car, Briefcase } from 'lucide-react';
 import { getCustomerData } from '@/lib/integrations/suitecrm/customer-portal/get-customer-data';
 import { Skeleton } from '@/components/ui/skeleton';
+import { TooltipContent } from '@/components/ui/tooltip';
+import { Tooltip } from '@/components/ui/tooltip';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 export interface Account {
   id: string;
@@ -26,10 +37,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
   const [accounts, setAccounts] = useState<Account[]>(initialAccounts);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortField, setSortField] = useState<keyof Account>('utilization');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
-  const [expandedRow, setExpandedRow] = useState<string | null>(null);
-  const [filter, setFilter] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<string>('');
 
   // Helper function to get cookie value
@@ -45,20 +52,16 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
       try {
         setLoading(true);
         
-        // Get all cookies for debugging
         const allCookies = typeof document !== 'undefined' ? document.cookie : '';
         console.log('All cookies:', allCookies);
         
-        // Get session ID from cookies
         const sessionId = getCookie('crm_session');
         const userId = getCookie('crm_user_id');
         
-        // Store debug info
         const debug = `SessionID: ${sessionId ? 'Found' : 'Not found'}, UserID: ${userId ? 'Found' : 'Not found'}`;
         setDebugInfo(debug);
         console.log(debug);
         
-        // During development, we can use hardcoded values if cookies aren't available
         const useDevMode = !sessionId || !userId;
         const devSessionId = 'dev_session_id';
         const devUserId = 'dev_user_id';
@@ -66,17 +69,14 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
         if (!sessionId || !userId) {
           if (process.env.NODE_ENV === 'development') {
             console.log('Using development fallback for session data');
-            // Continue with dev values
           } else {
             throw new Error('Session not found. Please log in again.');
           }
         }
         
-        // Fetch customer data
         let customerData = null;
         
         if (useDevMode && process.env.NODE_ENV === 'development') {
-          // Mock data for development
           console.log('Using mock customer data for development');
           customerData = {
             credit_info: {
@@ -87,7 +87,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
             }
           };
         } else {
-          // Real API call
           customerData = await getCustomerData(
             sessionId || devSessionId, 
             'web_portal', 
@@ -99,16 +98,11 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
           throw new Error('Failed to fetch customer data.');
         }
         
-        // Example mapping logic - modify based on actual API response structure
         const fetchedAccounts: Account[] = [];
         
-        // Check if we have tradelines data in the response
         if (customerData.tradelines && Array.isArray(customerData.tradelines)) {
-          // Map the tradelines to our Account format
           customerData.tradelines.forEach((tradeline: any) => {
-            // Determine account type based on tradeline properties
             let type: 'MTG' | 'CARD' | 'AUTO' | 'PERSONAL' = 'PERSONAL';
-            
             if (tradeline.account_type === 'mortgage' || tradeline.account_type === 'home loan') {
               type = 'MTG';
             } else if (tradeline.account_type === 'credit card' || tradeline.account_type === 'revolving') {
@@ -119,8 +113,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
             
             const balance = parseFloat(tradeline.current_balance || '0');
             const limit = parseFloat(tradeline.credit_limit || tradeline.original_amount || '0');
-            
-            // Calculate utilization
             const utilization = limit > 0 ? Math.round((balance / limit) * 100) : 0;
             
             fetchedAccounts.push({
@@ -132,32 +124,18 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
               age: tradeline.age || 'N/A',
               payment: parseFloat(tradeline.monthly_payment || '0'),
               utilization,
-              status: tradeline.status === 'late' 
-                ? 'late' 
-                : tradeline.status === 'delinquent' 
-                  ? 'delinquent' 
-                  : 'current'
+              status: tradeline.status === 'late' ? 'late' : tradeline.status === 'delinquent' ? 'delinquent' : 'current'
             });
           });
         } else if (customerData.credit_info) {
-          // If we have summary credit info but no tradelines, create mock accounts
           const creditInfo = customerData.credit_info;
-          
-          // Parse credit info with safe defaults
-          const totalLimitStr = (creditInfo.total_tl_limit || '0').toString();
-          const totalLimit = parseFloat(totalLimitStr.replace(/[$,]/g, ''));
-          
-          const utilizationStr = (creditInfo.total_credit_util || '0').toString();
-          const utilization = parseInt(utilizationStr.replace(/%/g, ''));
-          
+          const totalLimit = parseFloat((creditInfo.total_tl_limit || '0').toString().replace(/[$,]/g, ''));
+          const utilization = parseInt((creditInfo.total_credit_util || '0').toString().replace(/%/g, ''));
           const totalBalance = Math.round(totalLimit * (utilization / 100));
-          
           const activeTradelines = parseInt((creditInfo.open_tl || '0').toString());
           const ageOfOldest = (creditInfo.age_of_oldest_tl || '1y 0m').toString();
           
-          // Generate accounts based on summary data
           if (activeTradelines > 0) {
-            // Generate credit card accounts
             const cardCount = Math.ceil(activeTradelines * 0.5);
             for (let i = 0; i < cardCount; i++) {
               fetchedAccounts.push({
@@ -173,7 +151,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
               });
             }
             
-            // Add auto loans
             if (activeTradelines > 2) {
               fetchedAccounts.push({
                 id: 'auto-1',
@@ -188,7 +165,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
               });
             }
             
-            // Add personal loans
             if (activeTradelines > 3) {
               fetchedAccounts.push({
                 id: 'personal-1',
@@ -203,7 +179,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
               });
             }
             
-            // Add mortgage if relevant
             if (activeTradelines > 4) {
               fetchedAccounts.push({
                 id: 'mtg-1',
@@ -220,13 +195,11 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
           }
         }
         
-        // Use fetched accounts if we have them, otherwise fall back to initial accounts
         if (fetchedAccounts.length > 0) {
           setAccounts(fetchedAccounts);
         } else if (initialAccounts.length > 0) {
           setAccounts(initialAccounts);
         } else if (process.env.NODE_ENV === 'development') {
-          // In development mode, generate some accounts for testing
           setAccounts([
             {
               id: '1',
@@ -252,7 +225,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
             }
           ]);
         } else {
-          // If we have no accounts, we can either show an empty state or generate dummy data
           setAccounts([]);
         }
         
@@ -260,8 +232,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
       } catch (err) {
         console.error('Account fetch error:', err);
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
-        
-        // In development, provide fallback data
         if (process.env.NODE_ENV === 'development') {
           console.log('Using fallback accounts for development');
           setAccounts([
@@ -289,7 +259,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
             }
           ]);
         }
-        
         setLoading(false);
       }
     };
@@ -300,43 +269,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
       setLoading(false);
     }
   }, []);
-
-  const handleSort = (field: keyof Account) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortDirection('desc');
-    }
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'MTG':
-        return <Home size={16} className="text-blue-500" />;
-      case 'CARD':
-        return <CreditCard size={16} className="text-purple-500" />;
-      case 'AUTO':
-        return <Car size={16} className="text-green-500" />;
-      case 'PERSONAL':
-        return <Briefcase size={16} className="text-amber-500" />;
-      default:
-        return <CreditCard size={16} className="text-gray-500" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'current':
-        return 'text-green-500 bg-green-50';
-      case 'late':
-        return 'text-amber-500 bg-amber-50';
-      case 'delinquent':
-        return 'text-red-500 bg-red-50';
-      default:
-        return 'text-gray-500 bg-gray-50';
-    }
-  };
 
   const getUtilizationColor = (utilization: number) => {
     if (utilization > 80) return 'text-red-500';
@@ -356,7 +288,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
 
   const groupAccountsByType = () => {
     const grouped: Record<string, Account[]> = {};
-    
     accounts.forEach(account => {
       const type = account.type;
       if (!grouped[type]) {
@@ -364,16 +295,12 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
       }
       grouped[type].push(account);
     });
-    
     return grouped;
   };
 
   const groupedAccounts = groupAccountsByType();
-
-  // Make sure TypeScript knows the entries are valid
   const accountEntries: [string, Account[]][] = Object.entries(groupedAccounts);
 
-  // Loading state
   if (loading) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -392,7 +319,6 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -419,87 +345,91 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ initialAccounts = [] }) =
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-        <h3 className="text-xl font-heading font-bold text-[#1e3a4f]">Accounts</h3>
+        <h3 className="text-xl font-bold font-sans text-[#1e3a4f]">Accounts</h3>
         <div className="flex items-center gap-2">
-          <a href="#" className="text-blue-600 text-sm">View All</a>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <a href="#" className="text-primary text-sm">View All</a>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Coming soon</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
       
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="bg-[var(--background-alt)] text-sm border-b border-gray-200">
-              <th className="px-4 py-3 text-left font-medium">Type</th>
-              <th className="px-4 py-3 text-left font-medium">Count</th>
-              <th className="px-4 py-3 text-left font-medium">Creditor</th>
-              <th className="px-4 py-3 text-right font-medium">Balance</th>
-              <th className="px-4 py-3 text-right font-medium">Limit</th>
-              <th className="px-4 py-3 text-center font-medium">Age</th>
-              <th className="px-4 py-3 text-center font-medium">Pymt</th>
-              <th className="px-4 py-3 text-right font-medium">UTL*</th>
-            </tr>
-          </thead>
-          <tbody>
-            {accountEntries.map(([type, accountsOfType]: [string, Account[]]) => {
-              // Calculate summary data for this type
-              const count = accountsOfType.length;
-              const totalBalance = accountsOfType.reduce((sum, acc) => sum + acc.balance, 0);
-              const totalLimit = accountsOfType.reduce((sum, acc) => sum + acc.limit, 0);
-              const averageUtilization = totalLimit > 0 ? Math.round((totalBalance / totalLimit) * 100) : 0;
-              
-              return (
-                <React.Fragment key={type}>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium">{type}</span>
-                        <span className="text-xs text-gray-500">
-                          {type === 'MTG' ? 'Mortgage' : 
-                           type === 'CARD' ? 'Credit Card' : 
-                           type === 'AUTO' ? 'Auto Loan' : 
-                           type === 'PERSONAL' ? 'Personal Loan' : ''}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="text-sm">{count}</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="text-sm">N/A</span>
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <span className="text-sm font-medium numeric">{formatCurrency(totalBalance)}</span>
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <span className="text-sm numeric">{formatCurrency(totalLimit)}</span>
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <span className="text-sm">3y, 11m</span>
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <span className="text-sm">18</span>
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <span className={`text-sm font-medium ${getUtilizationColor(averageUtilization)}`}>
-                        {averageUtilization}%
-                      </span>
-                    </td>
-                  </tr>
-                </React.Fragment>
-              );
-            })}
-            {Object.keys(groupedAccounts).length === 0 && (
-              <tr>
-                <td colSpan={8} className="px-4 py-8 text-center opacity-70">
-                  No accounts found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Table className="w-full table-fixed">
+        <TableHeader>
+          <TableRow className="bg-[var(--background-alt)] border-b border-gray-200 text-muted-foreground">
+            <TableHead className="w-[15%]">Type</TableHead>
+            <TableHead className="w-[10%]">Count</TableHead>
+            <TableHead className="w-[15%]">Creditor</TableHead>
+            <TableHead className="w-[15%] text-right">Balance</TableHead>
+            <TableHead className="w-[15%] text-right">Limit</TableHead>
+            <TableHead className="w-[10%] text-center">Age</TableHead>
+            <TableHead className="w-[10%] text-center">Pymt</TableHead>
+            <TableHead className="w-[10%] text-right">UTL*</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {accountEntries.map(([type, accountsOfType]: [string, Account[]]) => {
+            const count = accountsOfType.length;
+            const totalBalance = accountsOfType.reduce((sum, acc) => sum + acc.balance, 0);
+            const totalLimit = accountsOfType.reduce((sum, acc) => sum + acc.limit, 0);
+            const averageUtilization = totalLimit > 0 ? Math.round((totalBalance / totalLimit) * 100) : 0;
+            
+            return (
+              <TableRow key={type} className="border-b border-gray-100 hover:bg-gray-50">
+                <TableCell className="w-[15%]">
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">{type}</span>
+                    <span className="text-xs text-gray-500">
+                      {type === 'MTG' ? 'Mortgage' : 
+                       type === 'CARD' ? 'Credit Card' : 
+                       type === 'AUTO' ? 'Auto Loan' : 
+                       type === 'PERSONAL' ? 'Personal Loan' : ''}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell className="w-[10%]">
+                  <span className="text-sm">{count}</span>
+                </TableCell>
+                <TableCell className="w-[15%]">
+                  <span className="text-sm">N/A</span>
+                </TableCell>
+                <TableCell className="w-[15%] text-right">
+                  <span className="text-sm font-medium numeric">{formatCurrency(totalBalance)}</span>
+                </TableCell>
+                <TableCell className="w-[15%] text-right">
+                  <span className="text-sm numeric">{formatCurrency(totalLimit)}</span>
+                </TableCell>
+                <TableCell className="w-[10%] text-center">
+                  <span className="text-sm">3y, 11m</span>
+                </TableCell>
+                <TableCell className="w-[10%] text-center">
+                  <span className="text-sm">18</span>
+                </TableCell>
+                <TableCell className="w-[10%] text-right">
+                  <span className={`text-sm font-medium ${getUtilizationColor(averageUtilization)}`}>
+                    {averageUtilization}%
+                  </span>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+          {Object.keys(groupedAccounts).length === 0 && (
+            <TableRow>
+              <TableCell colSpan={8} className="text-center opacity-70">
+                No accounts found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 };
 
-export default AccountsTable; 
+export default AccountsTable;

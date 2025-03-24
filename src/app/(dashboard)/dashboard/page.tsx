@@ -8,6 +8,7 @@ import CreditProfileOverview from "./components/credit-profile-overview";
 import AccountsTable from "./components/accounts-table";
 import ProgramOfferCards from "./components/recommended-program-cards";
 import { getAccounts, getCreditSummary } from "./utils/dataProvider";
+import AccountActions from "./components/account-actions";
 
 export default function HomePage() {
   const { userPromise } = useUser();
@@ -48,6 +49,9 @@ export default function HomePage() {
       {/* Credit Accounts */}
       <div>
         <AccountsTable accounts={accounts} />
+      </div>
+      <div>
+        <AccountActions/>
       </div>
     </div>
   );
