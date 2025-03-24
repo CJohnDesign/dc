@@ -14,6 +14,18 @@
 - Follow the Next.js App Router conventions
 - Minimize client-side JavaScript and use Server Components where possible
 
+## Authentication & API Integration
+- SuiteCRM API is the primary authentication provider
+- Two-tier authentication process:
+  1. First authenticate with admin credentials to get session
+  2. Then authenticate as broker or lead (when implemented)
+- Use HTTP-only cookies for session management
+- Use server actions for form submissions with proper error handling
+- Always include detailed error logging throughout API calls
+- Organize API integration code in the lib/integrations directory
+- Add clear TODO comments for incomplete functionality
+- Handle redirects properly with Next.js (return redirect() and catch NEXT_REDIRECT errors)
+
 ## Styling Guidelines
 - Use Tailwind CSS for styling
 - Body text: Rethink Sans from Google Fonts
