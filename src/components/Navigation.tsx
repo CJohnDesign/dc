@@ -1,16 +1,29 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
+import Logo from "@/components/logo";
+import { cn } from '@/lib/cn';
 
 interface NavigationProps {
   className?: string;
 }
 
-const Navigation = ({ className = '' }: NavigationProps) => {
+const navLinks = [
+  { name: 'Services', href: '/services' },
+  { name: 'Process', href: '/process' },
+  { name: 'Results', href: '/results' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
+];
+
+function Navigation({ className = '' }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,135 +34,107 @@ const Navigation = ({ className = '' }: NavigationProps) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Services', href: '/services' },
-    { name: 'Process', href: '/process' },
-    { name: 'Results', href: '/results' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
-  ];
-
   return (
     <header 
-      className={`
-        fixed top-0 left-0 right-0 z-50 transition-all duration-300
-        ${isScrolled 
-          ? 'bg-[var(--background)]/95 backdrop-blur-sm shadow-md py-3' 
-          : 'bg-transparent py-5'}
-        ${className}
-      `}
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+        isScrolled 
+          ? "bg-white/95 backdrop-blur-md shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] py-3" 
+          : "bg-transparent py-6",
+        className
+      )}
     >
       <div className="container mx-auto px-4 sm:px-8 md:px-16">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="relative z-10">
-            <Image 
-              src="/dc_logo.png" 
-              alt="Deliver Capital Logo" 
-              width={160} 
-              height={40} 
-              className="h-10 w-auto"
-            />
-          </Link>
+          <div className="relative z-10 transition-transform duration-300 hover:scale-[1.02]">
+            <Logo className="text-xl" />
+          </div>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`
-                  text-sm font-medium transition-colors
-                  ${isScrolled 
-                    ? 'text-[var(--foreground)] hover:text-[var(--primary)]' 
-                    : 'text-[var(--foreground)] hover:text-[var(--primary)]'}
-                `}
-              >
-                {link.name}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center space-x-10">
+            <div className="flex items-center space-x-10 mr-4">
+              {navLinks.map((link, index) => (
+                <div
+                  key={link.name}
+                  className="relative"
+                  onMouseEnter={() => setActiveIndex(index)}
+                  onMouseLeave={() => setActiveIndex(null)}
+                >
+                  <Link
+                    href={link.href}
+                    className="text-sm font-medium py-2 transition-colors text-foreground/90 hover:text-primary"
+                  >
+                    {link.name}
+                  </Link>
+                  <div className={cn(
+                    "absolute bottom-0 left-0 h-[2px] bg-primary rounded-full transition-all duration-300 ease-out",
+                    activeIndex === index ? "w-full opacity-100" : "w-0 opacity-0"
+                  )} />
+                </div>
+              ))}
+            </div>
             
-            <Link
-              href="/assessment"
-              className={`
-                px-4 py-2 text-sm font-semibold rounded-md transition-all
-                ${isScrolled 
-                  ? 'bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)]' 
-                  : 'bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)]'}
-              `}
+            <Button 
+              asChild 
+              variant="default" 
+              size="default"
+              className="rounded-full px-6 py-5 shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-primary-dark"
             >
-              Get Funded
-            </Link>
+              <Link href="/assessment">
+                Get Funded
+              </Link>
+            </Button>
           </nav>
           
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden relative z-10"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <div className="relative w-6 h-5">
-              <span 
-                className={`
-                  absolute left-0 top-0 w-full h-0.5 transition-all duration-300
-                  ${isMobileMenuOpen 
-                    ? 'rotate-45 translate-y-2 bg-[var(--foreground)]' 
-                    : isScrolled ? 'bg-[var(--foreground)]' : 'bg-[var(--foreground)]'}
-                `}
-              />
-              <span 
-                className={`
-                  absolute left-0 top-2 w-full h-0.5 transition-all duration-300
-                  ${isMobileMenuOpen 
-                    ? 'opacity-0' 
-                    : isScrolled ? 'bg-[var(--foreground)]' : 'bg-[var(--foreground)]'}
-                `}
-              />
-              <span 
-                className={`
-                  absolute left-0 top-4 w-full h-0.5 transition-all duration-300
-                  ${isMobileMenuOpen 
-                    ? '-rotate-45 -translate-y-2 bg-[var(--foreground)]' 
-                    : isScrolled ? 'bg-[var(--foreground)]' : 'bg-[var(--foreground)]'}
-                `}
-              />
-            </div>
-          </button>
-        </div>
-      </div>
-      
-      {/* Mobile Menu */}
-      <div 
-        className={`
-          fixed inset-0 bg-[var(--background)] z-40 transition-all duration-300 md:hidden
-          ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-        `}
-      >
-        <div className="container mx-auto px-4 sm:px-8 pt-24 pb-12">
-          <nav className="flex flex-col space-y-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-lg font-medium text-[var(--foreground)] hover:text-[var(--primary)]"
-                onClick={() => setIsMobileMenuOpen(false)}
+          {/* Mobile Menu */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="md:hidden hover:bg-primary/5 transition-all duration-300"
               >
-                {link.name}
-              </Link>
-            ))}
-            
-            <Link
-              href="/assessment"
-              className="px-6 py-3 bg-[var(--primary)] text-white text-center font-semibold rounded-md hover:bg-[var(--primary-dark)] mt-4"
-              onClick={() => setIsMobileMenuOpen(false)}
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent 
+              side="right" 
+              className="w-full sm:w-80 border-l-0 shadow-[0_0_40px_10px_rgba(0,0,0,0.1)]"
             >
-              Get Funded
-            </Link>
-          </nav>
+              <nav className="flex flex-col space-y-7 mt-14">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="text-lg font-medium text-foreground hover:text-primary transition-colors duration-300 transform hover:translate-x-1"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+                
+                <Button 
+                  asChild 
+                  variant="default" 
+                  size="lg" 
+                  className="w-full mt-6 rounded-full py-6 shadow-sm bg-primary hover:bg-primary-dark transition-all duration-300"
+                >
+                  <Link
+                    href="/assessment"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Get Funded
+                  </Link>
+                </Button>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
   );
-};
+}
 
 export default Navigation; 

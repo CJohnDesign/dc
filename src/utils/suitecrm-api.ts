@@ -8,7 +8,7 @@
 import axios, { AxiosError } from 'axios';
 
 // Base URL for the SuiteCRM API - replace with actual URL in production
-const API_BASE_URL = process.env.NEXT_PUBLIC_SUITECRM_API_URL || 'https://your-suitecrm-instance/api/v4';
+const API_BASE_URL = process.env.NEXT_PUBLIC_SUITECRM_API_URL || 'https://suitecrm.com/api/v4';
 
 // Default credentials - in production, these should be stored in environment variables
 const DEFAULT_USERNAME = process.env.SUITECRM_USERNAME || 'admin';

@@ -47,12 +47,12 @@ The client dashboard (`src/app/fund/dashboard/page.tsx`) provides:
 
 1. Install dependencies:
 ```bash
-npm install
+pnpm install
 ```
 
 2. Run the development server:
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 3. Open [http://localhost:3000](http://localhost:3000) to view the application
